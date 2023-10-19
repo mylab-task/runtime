@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLab.Task.Runtime", "MyLab.Task.Runtime\MyLab.Task.Runtime.csproj", "{9CA2E13D-A75A-4AC7-A576-1058201A0C9D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLab.Task.RuntimeSdk", "MyLab.Task.RuntimeSdk\MyLab.Task.RuntimeSdk.csproj", "{E5FF64AD-06B8-4700-AABA-C04C48B380A4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{9CA2E13D-A75A-4AC7-A576-1058201A0C9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CA2E13D-A75A-4AC7-A576-1058201A0C9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CA2E13D-A75A-4AC7-A576-1058201A0C9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5FF64AD-06B8-4700-AABA-C04C48B380A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5FF64AD-06B8-4700-AABA-C04C48B380A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5FF64AD-06B8-4700-AABA-C04C48B380A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5FF64AD-06B8-4700-AABA-C04C48B380A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
