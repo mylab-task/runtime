@@ -17,7 +17,7 @@ public class WriteToLogTaskLogic : ITaskLogic
 
     public ValueTask PerformAsync(TaskIterationContext iterationContext, CancellationToken cancellationToken)
     {
-        _logger.LogInformation(_options.Message);
+        _logger.Log(LogLevel.Information, default, _options.Message ?? "[empty]", null, (s, e) => s);
 
         return ValueTask.CompletedTask;
     }
