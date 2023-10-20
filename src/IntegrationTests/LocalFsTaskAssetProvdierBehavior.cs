@@ -67,6 +67,5 @@ public class LocalFsTaskAssetProviderBehavior
         //Assert
         Assert.Single(foundAssets);
         Assert.Equal("foo", foundAssets[0].Name);
-        Assert.EndsWith("assets/foo/foo.dll", foundAssets[0].LibPath);
     }
 }

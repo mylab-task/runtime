@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
 using MyLab.Log;
-using MyLab.Log.Dsl;
-using MyLab.Log.Scopes;
 
 namespace MyLab.Task.Runtime;
 
@@ -29,6 +27,13 @@ class LocalFsTaskAssetProvider : ITaskAssetProvider
     }
 
     private TaskAsset CreateTaskAsset(DirectoryInfo assetDir)
-        => new TaskAsset(assetDir.Name, Path.Combine(assetDir.FullName, assetDir.Name + ".dll"));
+    {
+        var fullAssemblyPath = Path.Combine(assetDir.FullName, assetDir.Name + ".dll");
+        return new TaskAsset
+        (
+            assetDir.Name,  
+            new FileAssemblyLoader(fullAssemblyPath)
+        );
+    }
 }
 
