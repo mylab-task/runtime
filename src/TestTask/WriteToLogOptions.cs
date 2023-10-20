@@ -1,6 +1,6 @@
 ﻿namespace TestTask;
 
-class WiteToLogOptions
+public class WriteToLogOptions
 {
     public string? Message { get; set; }
 }

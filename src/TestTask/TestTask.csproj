@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MyLab.Task.RuntimeSdk\MyLab.Task.RuntimeSdk.csproj" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
   </ItemGroup>
 
 </Project>
