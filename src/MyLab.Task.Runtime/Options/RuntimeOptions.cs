@@ -2,5 +2,5 @@
 
 public class RuntimeOptions
 {
-    public string AssetPath { get; set; } = "/etc/task-runtime/assets";
+    public string AssetsPath { get; set; } = "/etc/task-runtime/assets";
 }
