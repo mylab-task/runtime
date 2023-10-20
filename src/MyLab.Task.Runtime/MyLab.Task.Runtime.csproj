@@ -20,7 +20,14 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.11" />
+    <PackageReference Include="MyLab.Log" Version="3.5.28" />
+    <PackageReference Include="MyLab.Log.Dsl" Version="3.6.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
+
+  <ItemGroup>
+  <InternalsVisibleTo Include="IntegrationTests" />
+  <InternalsVisibleTo Include="UnitTests" />
+</ItemGroup>
 
 </Project>

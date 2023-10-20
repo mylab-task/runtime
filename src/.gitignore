@@ -16,3 +16,4 @@ TestResults
 *.bak
 .vs
 .idea
+.vscode
