@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "Integra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTask", "TestTask\TestTask.csproj", "{FCA8E5C2-4851-4AD8-857D-3B20F8724E0B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTask.UnitTests", "TestTask.UnitTests\TestTask.UnitTests.csproj", "{B992451C-5F05-4C4C-8900-22555660E23D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{FCA8E5C2-4851-4AD8-857D-3B20F8724E0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCA8E5C2-4851-4AD8-857D-3B20F8724E0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCA8E5C2-4851-4AD8-857D-3B20F8724E0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B992451C-5F05-4C4C-8900-22555660E23D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B992451C-5F05-4C4C-8900-22555660E23D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B992451C-5F05-4C4C-8900-22555660E23D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B992451C-5F05-4C4C-8900-22555660E23D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

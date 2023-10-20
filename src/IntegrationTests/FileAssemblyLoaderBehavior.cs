@@ -26,7 +26,6 @@ public class FileAssemblyLoaderBehavior
         //Act
         var loadedA = loader.Load(loadCtx);
         var aName = loadedA?.GetName().Name;
-        loadCtx.Unload();
 
         //Assert
         Assert.Equal("TestTask", aName);
