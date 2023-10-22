@@ -4,7 +4,7 @@ using MyLab.Task.RuntimeSdk;
 
 namespace TestTask;
 
-public class WriteToLogTaskApp : ITaskApp
+public class WriteToLogTaskStartup : ITaskStartup
 {
     public void AddConfiguration(IConfigurationBuilder configBuilder)
     {

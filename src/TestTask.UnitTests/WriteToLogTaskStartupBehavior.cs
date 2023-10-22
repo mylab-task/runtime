@@ -6,7 +6,7 @@ using MyLab.Task.RuntimeSdk;
 
 namespace TestTask.UnitTests
 {
-    public class WriteToLogTaskAppBehavior
+    public class WriteToLogTaskStartupBehavior
     {
         [Fact]
         public async Task ShouldInitTask()
@@ -34,7 +34,7 @@ namespace TestTask.UnitTests
                 .AddSingleton<ILogger>(loggerMock.Object)
                 .Configure<WriteToLogOptions>(o => o.Message = "foo");
 
-            var app = new WriteToLogTaskApp();
+            var app = new WriteToLogTaskStartup();
 
             //Act
             app.AddConfiguration(configBuilder);

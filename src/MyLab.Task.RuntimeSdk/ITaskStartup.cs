@@ -6,7 +6,7 @@ namespace MyLab.Task.RuntimeSdk;
 /// <summary>
 /// Initializes Task application
 /// </summary>
-public interface ITaskApp
+public interface ITaskStartup
 {
     /// <summary>
     /// Add custom configuration here
