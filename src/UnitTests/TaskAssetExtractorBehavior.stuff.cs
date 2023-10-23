@@ -17,25 +17,14 @@ public partial class TaskAssetExtractorBehavior
         _testAsset = new TaskAssetSource("foo", testAssemblyLoader);
     }
 
-    TaskAssetExtractor.IAssemblyTypesProvider GetAsmProviderMock(
-        IEnumerable<TaskAssetExtractor.TaskLogicTypeDesc> logicTypes,
-        Type? defaultStartupType)
+    TaskAssetExtractor.IStrategy GetStrategyMock(
+        IEnumerable<TaskAssetExtractor.TypeDesc> types)
     {
-        var asselbyTypesProviderMock = new Mock<TaskAssetExtractor.IAssemblyTypesProvider>();
-        asselbyTypesProviderMock.Setup(p => p.GetTaskLogicTypes(It.IsAny<Assembly>()))
-            .Returns<Assembly>(a => logicTypes);
-        asselbyTypesProviderMock.Setup(p => p.GetDefaultStartupType(It.IsAny<Assembly>()))
-            .Returns<Assembly>(a => defaultStartupType);
+        var asselbyTypesProviderMock = new Mock<TaskAssetExtractor.IStrategy>();
+        asselbyTypesProviderMock.Setup(p => p.GetAssemblyTypes(It.IsAny<Assembly>()))
+            .Returns<Assembly>(a => types);
 
         return asselbyTypesProviderMock.Object;
-    }
-
-    class TestTypeLogic : ITaskLogic
-    {
-        public ValueTask PerformAsync(TaskIterationContext iterationContext, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
     }
 
     class TestTaskStartup : ITaskStartup

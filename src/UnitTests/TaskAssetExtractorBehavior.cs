@@ -1,5 +1,6 @@
 ﻿using MyLab.Task.Runtime;
 using MyLab.Task.RuntimeSdk;
+using TypeDesc = MyLab.Task.Runtime.TaskAssetExtractor.TypeDesc;
 
 namespace IntegrationTests;
 
@@ -19,7 +20,6 @@ public partial class TaskAssetExtractorBehavior
         Assert.NotNull(found);
         Assert.Equal("foo", found.Name.Asset);
         Assert.Null(found.Name.LocalName);
-        Assert.Equal("WriteToLogTaskLogic", found.LogicType.Name);
         Assert.Equal("WriteToLogTaskStartup", found.StartupType.Name);
     }
 
@@ -27,12 +27,7 @@ public partial class TaskAssetExtractorBehavior
     public void ShouldFailIfNoTaskInAssembly()
     {
         //Arrange
-        var getAssemblyTypesMock = GetAsmProviderMock
-        (
-            Enumerable.Empty<TaskAssetExtractor.TaskLogicTypeDesc>(),
-            null
-        );
-
+        var getAssemblyTypesMock = GetStrategyMock(Array.Empty<TypeDesc>());
         var extractor = new TaskAssetExtractor(_testAsset, getAssemblyTypesMock);
         
         //Act & Assert
@@ -43,109 +38,51 @@ public partial class TaskAssetExtractorBehavior
     public void ShouldFailIfSeveralTasksWithoutLocalNames()
     {
         //Arrange
-        var getAssemblyTypesMock = GetAsmProviderMock
-        (
-            Enumerable.Empty<TaskAssetExtractor.TaskLogicTypeDesc>(),
-            null
-        );
-        
-        var extractor = new TaskAssetExtractor(_testAsset, getAssemblyTypesMock);
-        
-        //Act & Assert
-        Assert.Throws<InvalidOperationException>(() => extractor.Extract().ToArray());
-    }
-
-    [Fact(DisplayName = "Fail if task without startup and no default one")]
-    public void ShouldFailIfNoTaskStartupAndDefaultStartup()
-    {
-        //Arrange
-        var getAssemblyTypesMock = GetAsmProviderMock
-        (
-            new []{ new TaskAssetExtractor.TaskLogicTypeDesc(typeof(TestTypeLogic), null) },
-            null
-        );
-        
-        var extractor = new TaskAssetExtractor(_testAsset, getAssemblyTypesMock);
-        
-        //Act & Assert
-        Assert.Throws<InvalidOperationException>(() => extractor.Extract().ToArray());
-    }
-
-    [Fact(DisplayName = "Load with deafult startup")]
-    public void ShouldLoadWithDefaultStartup()
-    {
-        //Arrange
-        var getAssemblyTypesMock = GetAsmProviderMock
-        (
-            new []{ new TaskAssetExtractor.TaskLogicTypeDesc(typeof(TestTypeLogic), null) },
-            typeof(TestTaskStartup)
-        );
-        
-        var extractor = new TaskAssetExtractor(_testAsset, getAssemblyTypesMock);
-        
-        //Act 
-        var tasks = extractor.Extract().ToArray();
-        var foundTask = tasks.SingleOrDefault();
-
-        //Assert
-        Assert.NotNull(foundTask);
-        Assert.Equal(typeof(TestTypeLogic), foundTask.LogicType);
-        Assert.Equal(typeof(TestTaskStartup), foundTask.StartupType);
-    }
-
-    [Fact(DisplayName = "Load with explicite startup")]
-    public void ShouldLoadWithExpliciteStartup()
-    {
-        //Arrange
-        var getAssemblyTypesMock = GetAsmProviderMock
+        var getAssemblyTypesMock = GetStrategyMock
         (
             new []
-            { 
-                new TaskAssetExtractor.TaskLogicTypeDesc
+            {
+                new TypeDesc
                 (
-                    typeof(TestTypeLogic), 
-                    new TaskAttribute
-                    {
-                        Startup = typeof(TestTaskStartup)
-                    }
-                ) 
-            },
-            null
+                    Type: typeof(TestTaskStartup), 
+                    IsPublic: true,
+                    IsImplTaskStartup: true,
+                    Name: null
+                ),
+                new TypeDesc
+                (
+                    Type: typeof(TestTaskStartup), 
+                    IsPublic: true,
+                    IsImplTaskStartup: true,
+                    Name: null
+                ),
+            }
         );
-        
         var extractor = new TaskAssetExtractor(_testAsset, getAssemblyTypesMock);
         
-        //Act 
-        var tasks = extractor.Extract().ToArray();
-        var foundTask = tasks.SingleOrDefault();
-
-        //Assert
-        Assert.NotNull(foundTask);
-        Assert.Equal(typeof(TestTypeLogic), foundTask.LogicType);
-        Assert.Equal(typeof(TestTaskStartup), foundTask.StartupType);
+        //Act & Assert
+        Assert.Throws<InvalidOperationException>(() => extractor.Extract().ToArray());
     }
 
+    
     [Theory(DisplayName = "Should create correct task name")]
     [InlineData("bar")]
     [InlineData(null)]
     public void ShouldCreateCorrectTaskName(string localName)
     {
         //Arrange        
-        var getAssemblyTypesMock = GetAsmProviderMock
+        var getAssemblyTypesMock = GetStrategyMock
         (
             new []
-            { 
-                new TaskAssetExtractor.TaskLogicTypeDesc
+            {
+                new TypeDesc
                 (
-                    typeof(TestTypeLogic), 
-                    new TaskAttribute
-                    {
-                        Startup = typeof(TestTaskStartup),
-                        Name = localName
-                    }
-                ) 
-            },
-            null
+                    Type: typeof(TestTaskStartup), 
+                    IsPublic: true,
+                    IsImplTaskStartup: true,
+                    Name: localName
+                ),
+            }
         );
         
         var extractor = new TaskAssetExtractor(_testAsset, getAssemblyTypesMock);

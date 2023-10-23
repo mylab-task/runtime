@@ -2,23 +2,24 @@
 using System.Runtime.Loader;
 using MyLab.Log;
 using MyLab.Task.RuntimeSdk;
+using YamlDotNet.Serialization.EventEmitters;
 
 namespace MyLab.Task.Runtime;
 
 public class TaskAssetExtractor
 {
     private TaskAssetSource _taskAssetSource;
-    private IAssemblyTypesProvider _typesProvider;
+    private IStrategy _strategy;
 
     public TaskAssetExtractor(TaskAssetSource taskAssetSource)
-        :this(taskAssetSource, new DefaultIAssemblyTypesProvider())
+        :this(taskAssetSource, new DefaultStrategy())
     {
     }
 
-    public TaskAssetExtractor(TaskAssetSource taskAssetSource, IAssemblyTypesProvider typesProvider)
+    public TaskAssetExtractor(TaskAssetSource taskAssetSource, IStrategy strategy)
     {
         _taskAssetSource = taskAssetSource ?? throw new ArgumentNullException(nameof(taskAssetSource));
-        _typesProvider = typesProvider ?? throw new ArgumentNullException(nameof(typesProvider));
+        _strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
     }
 
     public IEnumerable<TaskFactory> Extract()
@@ -27,72 +28,53 @@ public class TaskAssetExtractor
 
         var assembly =_taskAssetSource.Loader.Load(ctx);
         
-        var taskLogicTypes = _typesProvider.GetTaskLogicTypes(assembly);
-
-        Type? defaultTaskStartup = _typesProvider.GetDefaultStartupType(assembly);
-
-        var result = new List<TaskFactory>();
-        foreach (var task in taskLogicTypes)
-        {
-            result.Add(new TaskFactory
+        var found = _strategy.GetAssemblyTypes(assembly)
+            .Where(t => t.IsPublic && t.IsImplTaskStartup)
+            .Select(t => new TaskFactory
             (
-                new TaskQualifiedName(_taskAssetSource.Name, task.Attribute?.Name),
-                task.LogicType,
-                DetermineStartup(task.LogicType.Name, task.Attribute?.Startup, defaultTaskStartup)
-            ));
+                new TaskQualifiedName(_taskAssetSource.Name, t.Name),
+                t.Type
+            ))
+            .ToArray();
+
+        if(found.Length == 0) 
+        {
+            throw new InvalidOperationException("No tasks found")
+                .AndFactIs("assert", _taskAssetSource.Name);
         }
+        if(found.Count(t => string.IsNullOrWhiteSpace(t.Name.LocalName)) > 1)
+        {
+            throw new InvalidOperationException("More then one task with default name detected")
+                .AndFactIs("assert", _taskAssetSource.Name);
+        } 
 
-        if(result.Count == 0)
-            throw new InvalidOperationException("Tasks not found in assert")
-                .AndFactIs("asset-name", _taskAssetSource.Name);
-
-        return result;
+        return found;
     }
 
-    Type DetermineStartup(string taskLogicClassName, Type? expliciteStartup, Type? defaultStartup)
+    class DefaultStrategy : IStrategy
     {
-        if(expliciteStartup != null)
+        public IEnumerable<TypeDesc> GetAssemblyTypes(Assembly assembly)
         {
-            return expliciteStartup;
-        }
-        else
-        {
-            if(defaultStartup != null)
-            {
-                return defaultStartup;
-            }
-            else
-            {
-                throw new InvalidOperationException
-                (
-                    "A task should reference to a startup or there is should be the one startup in assembly"
-                )
-                .AndFactIs("task-logic", taskLogicClassName);
-            }
+            return assembly.GetTypes().Select(t => TypeDesc.FromType(t));
         }
     }
 
-    class DefaultIAssemblyTypesProvider : IAssemblyTypesProvider
+    public interface IStrategy
     {
-        public Type? GetDefaultStartupType(Assembly assembly)
-        {
-            return assembly.GetTypes().SingleOrDefault(t => t.IsAssignableTo(typeof(ITaskStartup)));
-        }
-
-        public IEnumerable<TaskLogicTypeDesc> GetTaskLogicTypes(Assembly assembly)
-        {
-            return assembly.GetTypes()
-                .Where(t => t.IsAssignableTo(typeof(ITaskLogic)))
-                .Select(t => new TaskLogicTypeDesc(t, t.GetCustomAttribute<TaskAttribute>()));
-        }
+        IEnumerable<TypeDesc> GetAssemblyTypes(Assembly assembly);
     }
 
-    public interface IAssemblyTypesProvider
+    public record TypeDesc(Type Type, bool IsPublic, bool IsImplTaskStartup, string? Name)
     {
-        IEnumerable<TaskLogicTypeDesc> GetTaskLogicTypes(Assembly assembly);
-
-        Type? GetDefaultStartupType(Assembly assembly);
+        public static TypeDesc FromType(Type type)
+        {
+            return new TypeDesc
+            (
+                type,
+                type.IsPublic,
+                type.IsAssignableTo(typeof(ITaskStartup)),
+                type.GetCustomAttribute<TaskNameAttribute>()?.Name
+            );
+        }
     }
-
-    public record TaskLogicTypeDesc(Type LogicType, TaskAttribute? Attribute);
 }
