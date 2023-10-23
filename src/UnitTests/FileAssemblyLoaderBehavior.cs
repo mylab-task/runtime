@@ -9,17 +9,7 @@ public class FileAssemblyLoaderBehavior
     public void ShouldLoadAssembly()
     {
         //Arrange
-        string testAssemblyPath = 
-            Path.GetFullPath
-            (
-                Path.Combine
-                (
-                    Directory.GetCurrentDirectory(), 
-                    "../../../../TestTask/bin/Debug/net7.0/TestTask.dll"
-                )
-            );
-            
-        var loader = new FileAssemblyLoader(testAssemblyPath);
+        var loader = new FileAssemblyLoader(TestStuff.GetTestAssemblyPath());
         
         var loadCtx = new AssemblyLoadContext("test", isCollectible: true);
 

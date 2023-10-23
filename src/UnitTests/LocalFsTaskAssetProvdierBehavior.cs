@@ -49,7 +49,7 @@ public class LocalFsTaskAssetProviderBehavior
 
         var provider = srv.GetRequiredService<ITaskAssetProvider>();
         
-        TaskAsset[] foundAssets;
+        TaskAssetSource[] foundAssets;
 
         if(!assetDir.Exists)
             assetDir.Create();

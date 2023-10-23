@@ -3,7 +3,7 @@ using System.Runtime.Loader;
 
 namespace MyLab.Task.Runtime;
 
-interface IAssemblyLoader
+public interface IAssemblyLoader
 {
     Assembly Load(AssemblyLoadContext ctx);
 }

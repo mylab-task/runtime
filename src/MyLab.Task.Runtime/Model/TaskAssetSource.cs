@@ -1,12 +1,12 @@
 ﻿namespace MyLab.Task.Runtime;
 
-class TaskAsset
+public class TaskAssetSource
 {
     public string Name { get; }
 
     public IAssemblyLoader Loader { get; }
 
-    public TaskAsset(string name, IAssemblyLoader loader)
+    public TaskAssetSource(string name, IAssemblyLoader loader)
     {
         if (string.IsNullOrEmpty(name))
         {

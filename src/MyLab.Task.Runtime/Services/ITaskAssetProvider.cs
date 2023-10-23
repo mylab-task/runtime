@@ -2,6 +2,6 @@
 
 interface ITaskAssetProvider
 {
-    IEnumerable<TaskAsset> Provide();
+    IEnumerable<TaskAssetSource> Provide();
 }
 

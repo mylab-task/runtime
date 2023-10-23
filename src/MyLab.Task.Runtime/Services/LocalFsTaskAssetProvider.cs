@@ -13,7 +13,7 @@ class LocalFsTaskAssetProvider : ITaskAssetProvider
         _options = options.Value;
     }
 
-    public IEnumerable<TaskAsset> Provide()
+    public IEnumerable<TaskAssetSource> Provide()
     {
         var libDir = new DirectoryInfo(_options.AssetsPath);
 
@@ -26,10 +26,10 @@ class LocalFsTaskAssetProvider : ITaskAssetProvider
         return libDir.GetDirectories().Select(CreateTaskAsset);
     }
 
-    private TaskAsset CreateTaskAsset(DirectoryInfo assetDir)
+    private TaskAssetSource CreateTaskAsset(DirectoryInfo assetDir)
     {
         var fullAssemblyPath = Path.Combine(assetDir.FullName, assetDir.Name + ".dll");
-        return new TaskAsset
+        return new TaskAssetSource
         (
             assetDir.Name,  
             new FileAssemblyLoader(fullAssemblyPath)

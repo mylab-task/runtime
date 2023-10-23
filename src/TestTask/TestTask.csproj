@@ -4,10 +4,14 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyLab.Task.RuntimeSdk\MyLab.Task.RuntimeSdk.csproj" />
+    <ProjectReference Include="..\MyLab.Task.RuntimeSdk\MyLab.Task.RuntimeSdk.csproj">
+      <Private>false</Private>
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </ProjectReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
   </ItemGroup>

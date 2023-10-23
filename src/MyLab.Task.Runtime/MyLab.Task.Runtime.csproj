@@ -29,4 +29,8 @@
   <InternalsVisibleTo Include="UnitTests" />
 </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MyLab.Task.RuntimeSdk\MyLab.Task.RuntimeSdk.csproj" />
+  </ItemGroup>
+
 </Project>

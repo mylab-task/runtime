@@ -20,6 +20,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Moq" Version="4.20.69" />
+    <PackageReference Include="MyLab.Log.XUnit" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyLab.Task.Runtime\MyLab.Task.Runtime.csproj" />
+    <ProjectReference Include="..\MyLab.Task.RuntimeSdk\MyLab.Task.RuntimeSdk.csproj" />
   </ItemGroup>
 
 </Project>
