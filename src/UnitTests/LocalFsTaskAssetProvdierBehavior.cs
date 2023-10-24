@@ -8,24 +8,11 @@ namespace IntegrationTests;
 
 public class LocalFsTaskAssetProviderBehavior
 {
-    private ITestOutputHelper _output;
-
-    public LocalFsTaskAssetProviderBehavior(ITestOutputHelper output)
-    {
-        _output = output;
-    }
-
     [Fact(DisplayName = "Fail if asset dir not found")]
     public void ShouldFailIfAssetDirNotFound()
     {
         //Arrange
-        var srv = new ServiceCollection()
-            .AddLogging(l => l.AddXUnit(_output).AddFilter(ll => true))
-            .AddSingleton<ITaskAssetProvider, LocalFsTaskAssetProvider>()
-            .Configure<RuntimeOptions>(o => o.AssetsPath = "absent")
-            .BuildServiceProvider();
-
-        var provider = srv.GetRequiredService<ITaskAssetProvider>();
+        ITaskAssetProvider provider = new LocalFsTaskAssetProvider("absent");
         
         //Act & Assert
         Assert.Throws<DirectoryNotFoundException>(provider.Provide);
@@ -35,20 +22,9 @@ public class LocalFsTaskAssetProviderBehavior
     public void ShouldFindAssetByNestedDir()
     {
         //Arrange
+        ITaskAssetProvider provider = new LocalFsTaskAssetProvider("assets");
         var assetDir = new DirectoryInfo("assets/foo");
 
-        var srv = new ServiceCollection()
-            .AddLogging(l => l
-                .AddXUnit(_output)
-                .AddFilter(ll => true)
-
-                )
-            .AddSingleton<ITaskAssetProvider, LocalFsTaskAssetProvider>()
-            .Configure<RuntimeOptions>(o => o.AssetsPath = "assets")
-            .BuildServiceProvider();
-
-        var provider = srv.GetRequiredService<ITaskAssetProvider>();
-        
         TaskAssetSource[] foundAssets;
 
         if(!assetDir.Exists)
