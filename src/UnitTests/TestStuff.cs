@@ -1,4 +1,4 @@
-﻿namespace IntegrationTests;
+﻿namespace UnitTests;
 
 static class TestStuff
 {

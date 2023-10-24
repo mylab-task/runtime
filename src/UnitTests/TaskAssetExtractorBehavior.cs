@@ -2,7 +2,7 @@
 using MyLab.Task.RuntimeSdk;
 using TypeDesc = MyLab.Task.Runtime.TaskAssetExtractor.TypeDesc;
 
-namespace IntegrationTests;
+namespace UnitTests;
 
 public partial class TaskAssetExtractorBehavior
 {

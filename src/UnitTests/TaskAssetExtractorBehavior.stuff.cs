@@ -5,7 +5,7 @@ using Moq;
 using MyLab.Task.Runtime;
 using MyLab.Task.RuntimeSdk;
 
-namespace IntegrationTests;
+namespace UnitTests;
 
 public partial class TaskAssetExtractorBehavior
 {

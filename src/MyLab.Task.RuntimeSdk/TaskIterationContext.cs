@@ -6,9 +6,9 @@
 public class TaskIterationContext
 {
     /// <summary>
-    /// Iteration identifier
+    /// Trace identifier
     /// </summary>
-    public string Id { get; }
+    public string? TraceId { get; }
 
     /// <summary>
     /// Date and time of iteration start
@@ -23,9 +23,9 @@ public class TaskIterationContext
     /// <summary>
     /// Initializes a new instance of <see cref="TaskIterationContext"/>
     /// </summary>
-    public TaskIterationContext(string id, DateTime startAt)
+    public TaskIterationContext(string? traceId, DateTime startAt)
     {
-        Id = id;
+        TraceId = traceId;
         StartAt = startAt;
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Loader;
 using MyLab.Task.Runtime;
 
-namespace IntegrationTests;
+namespace UnitTests;
 
 public class FileAssemblyLoaderBehavior
 {

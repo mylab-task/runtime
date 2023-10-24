@@ -1,10 +1,6 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using MyLab.Log.XUnit;
 using MyLab.Task.Runtime;
-using Xunit.Abstractions;
 
-namespace IntegrationTests;
+namespace UnitTests;
 
 public class LocalFsTaskAssetProviderBehavior
 {

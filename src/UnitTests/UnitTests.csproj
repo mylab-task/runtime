@@ -22,6 +22,7 @@
     </PackageReference>
     <PackageReference Include="Moq" Version="4.20.69" />
     <PackageReference Include="MyLab.Log.XUnit" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0"/>
   </ItemGroup>
 
   <ItemGroup>

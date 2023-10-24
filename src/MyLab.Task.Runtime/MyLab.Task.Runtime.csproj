@@ -22,6 +22,9 @@
     <PackageReference Include="MyLab.Log" Version="3.5.28" />
     <PackageReference Include="MyLab.Log.Dsl" Version="3.6.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="OpenTelemetry" Version="1.6.0" />
+    <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.6.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.5.0-beta.1" />
   </ItemGroup>
 
   <ItemGroup>
