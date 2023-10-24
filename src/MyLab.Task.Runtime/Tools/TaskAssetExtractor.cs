@@ -22,7 +22,7 @@ public class TaskAssetExtractor
         _strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
     }
 
-    public IEnumerable<TaskFactory> Extract()
+    public IEnumerable<TaskStartupFactory> Extract()
     {
         var ctx = new AssemblyLoadContext("task:" + _taskAssetSource.Name);
 
@@ -55,7 +55,7 @@ public class TaskAssetExtractor
             }
         }
 
-        return found.Select(t => new TaskFactory
+        return found.Select(t => new TaskStartupFactory
             (
                 new TaskQualifiedName(_taskAssetSource.Name, t.Name),
                 t.Type
