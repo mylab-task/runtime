@@ -147,13 +147,21 @@ public class TaskAppBehavior
                 new [] { new KeyValuePair<string, string>("foo", "bar") }
             ).Build();
         var startupMock = new Mock<ITaskStartup>();
+
+        bool servicesHasBeenProcessed = false;
         
         //Act
-        TaskApp taskApp = TaskApp.Create(new TaskQualifiedName("baz", null), startupMock.Object, baseConfig);
+        TaskApp taskApp = TaskApp.Create
+        (
+            new TaskQualifiedName("baz", null), 
+            startupMock.Object, 
+            baseConfig,
+            _ => servicesHasBeenProcessed = true
+        );
         
         //Assert
         Assert.Equal("baz", taskApp.Name.Asset);
-
+        Assert.True(servicesHasBeenProcessed);
         startupMock.Verify
         (
             s => s.AddConfiguration

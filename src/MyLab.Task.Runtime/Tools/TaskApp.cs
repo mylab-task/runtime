@@ -17,7 +17,13 @@ class TaskApp
         Name = name ?? throw new ArgumentNullException(nameof(name));
     }
 
-    public static TaskApp Create(TaskQualifiedName name, ITaskStartup startup, IConfiguration? baseConfig)
+    public static TaskApp Create
+    (
+        TaskQualifiedName name, 
+        ITaskStartup startup, 
+        IConfiguration? baseConfig,
+        Action<IServiceCollection>? postServiceProc
+    )
     {
         if (startup is null) throw new ArgumentNullException(nameof(startup));
 
@@ -32,6 +38,8 @@ class TaskApp
             .AddSingleton<IConfiguration>(config);
         
         startup.AddServices(services, config);
+
+        postServiceProc?.Invoke(services);
 
         var serviceProvider = services.BuildServiceProvider();
 
