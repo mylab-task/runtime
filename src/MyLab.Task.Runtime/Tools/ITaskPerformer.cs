@@ -3,7 +3,7 @@
 using Task = System.Threading.Tasks.Task;
 
 
-interface ITaskPerformer
+public interface ITaskPerformer
 {
     TaskQualifiedName TaskName { get; }
     Task PerformIterationAsync(CancellationToken cancellationToken);
