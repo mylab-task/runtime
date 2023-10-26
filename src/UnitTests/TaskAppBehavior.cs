@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -56,7 +57,7 @@ public class TaskAppBehavior
         Assert.Equal(2, taskCreationCounter);
     }
 
-    [Fact(DisplayName = "Should use trace id as iteration id")]
+    [Fact(DisplayName = "Should use trace id")]
     public async Task ShouldSetIterationIdFromTraceId()
     {
         //Arrange
@@ -134,6 +135,40 @@ public class TaskAppBehavior
         //Assert
         Assert.Contains(TestFormatter.Catched, s => s.Key == LogScopes.TaskNameFact);
         Assert.Contains(TestFormatter.Catched, s => s.Key == MyLab.Log.PredefinedLabels.TraceId);
+    }
+
+    [Fact(DisplayName = "Shoud create and init TaskApp")]
+    public void ShouldCrateAndInitStartup()
+    {
+        //Arrange
+        var baseConfig = new ConfigurationBuilder()
+            .AddInMemoryCollection
+            (
+                new [] { new KeyValuePair<string, string>("foo", "bar") }
+            ).Build();
+        var startupMock = new Mock<ITaskStartup>();
+        
+        //Act
+        TaskApp taskApp = TaskApp.Create(new TaskQualifiedName("baz", null), startupMock.Object, baseConfig);
+        
+        //Assert
+        Assert.Equal("baz", taskApp.Name.Asset);
+
+        startupMock.Verify
+        (
+            s => s.AddConfiguration
+            (
+                It.Is<IConfigurationBuilder>(c => c.Build()["foo"] == "bar")
+            )
+        );
+        startupMock.Verify
+        (
+            s => s.AddServices
+            (
+                It.Is<IServiceCollection>(s => s != null), 
+                It.Is<IConfiguration>(c => c["foo"] == "bar")
+            )
+        );
     }
 
     class TestFormatter : ConsoleFormatter
