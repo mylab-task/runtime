@@ -53,7 +53,7 @@ class Scheduler
         {
             Logger?
                 .Error("Task performing error", unhandledTaskEx)
-                .AndLabel(LogScopes.TaskName, t.Performer.TaskName.ToString())
+                .AndLabel(Constants.TaskNameLogLabel, t.Performer.TaskName.ToString())
                 .Write();
         }
     }

@@ -43,7 +43,7 @@ class TaskPerformer : ITaskPerformer
 
             var labels = new Dictionary<string, string>
             {
-                { LogScopes.TaskName, TaskName.ToString() }
+                { Constants.TaskNameLogLabel, TaskName.ToString() }
             };
 
             if(traceId != null)
@@ -62,7 +62,7 @@ class TaskPerformer : ITaskPerformer
         }
         catch(Exception e)
         {
-            e.AndLabel(LogScopes.TaskName, TaskName.ToString());
+            e.AndLabel(Constants.TaskNameLogLabel, TaskName.ToString());
 
             if(traceId != null)
             {

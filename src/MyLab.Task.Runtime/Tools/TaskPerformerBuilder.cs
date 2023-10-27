@@ -17,7 +17,7 @@ class TaskPerformerBuilder
         _startup = startup ?? throw new ArgumentNullException(nameof(startup));
     }
 
-    public ITaskPerformer Create()
+    public ITaskPerformer Build()
     {
         var configBuilder = new ConfigurationBuilder();
         if(BaseConfig != null) configBuilder.AddConfiguration(BaseConfig);

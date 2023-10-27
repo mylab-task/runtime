@@ -28,7 +28,7 @@ public class TaskPerformerBuilderBehavior
         }; 
         
         //Act
-        ITaskPerformer taskApp = builder.Create();
+        ITaskPerformer taskApp = builder.Build();
         
         //Assert
         Assert.Equal("baz", taskApp.TaskName.Asset);
