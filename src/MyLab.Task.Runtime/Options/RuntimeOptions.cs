@@ -6,8 +6,6 @@ public class RuntimeOptions
 
     public Dictionary<string, TaskOptions>? Tasks { get; set; }
 
-    public TimeSpan DefaultPeriod { get; set; } = TimeSpan.FromMinutes(1);
-
     public IConfigurationSection? BaseTaskConfig { get; set; }
 
     public string ProtocolId { get; set; } = "tasks";

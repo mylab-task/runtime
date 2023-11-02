@@ -86,8 +86,10 @@ public class RuntimeBehavior
         Assert.False(thereWasErrorLog);
     }
 
-    [Fact(DisplayName = "Should perform task")]
-    public async Task ShouldPerformTaskPeriodically()
+    [Theory(DisplayName = "Should perform task")]
+    [InlineData(1, 2)]
+    [InlineData(0, 0)]
+    public async Task ShouldPerformTaskPeriodically(int timeSpanSeconds, int performCount)
     {
         //Arrange
         var testTaskAssembly = typeof(IRequestSender).Assembly;
@@ -142,7 +144,7 @@ public class RuntimeBehavior
                         "test" , 
                         new TaskOptions
                         {
-                            Period = TimeSpan.FromSeconds(1),
+                            Period = TimeSpan.FromSeconds(timeSpanSeconds),
                             Config = taskConfigSection
                         }
                     }
@@ -174,6 +176,6 @@ public class RuntimeBehavior
         Task.WaitAll(tasks);
 
         //Assert
-        requestSenderMock.Verify(sender => sender.SendAsync(It.Is<string>(msg => msg == "foo")), Times.Exactly(2));
+        requestSenderMock.Verify(sender => sender.SendAsync(It.Is<string>(msg => msg == "foo")), Times.Exactly(performCount));
     }
 }

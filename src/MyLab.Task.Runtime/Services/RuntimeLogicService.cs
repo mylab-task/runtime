@@ -76,13 +76,29 @@ class RuntimeLogicService : BackgroundService
 
     private void RegisterTasks(IEnumerable<ITaskPerformer> taskPerformers, Scheduler scheduler)
     {
+        
         foreach (var p in taskPerformers)
         {
-            var period = _options.Tasks != null && _options.Tasks.TryGetValue(p.TaskName.ToString(), out var tOpts)
-                ? (tOpts.Period ?? _options.DefaultPeriod)
-                : _options.DefaultPeriod;
+            using(_log?.BeginScope(new LabelLogScope(LogLabels.TaskName, p.TaskName.ToString())))
+            {
+                if(_options.Tasks == null || !_options.Tasks.TryGetValue(p.TaskName.ToString(), out var tOpts))
+                {
+                    _log?.Warning("Task config not found").Write();
+                    continue;
+                }
 
-            scheduler.RegisterTask(p, period);
+                if(!tOpts.Period.HasValue || tOpts.Period.Value == default)
+                {
+                    _log?.Warning("Task period is not specified").Write();
+                    continue;
+                }
+
+                scheduler.RegisterTask(p, tOpts.Period.Value);
+
+                _log?.Action("The task has been registered in scheduler")
+                    .AndFactIs("period", tOpts.Period.Value)
+                    .Write();
+            }
         }
     }
 
