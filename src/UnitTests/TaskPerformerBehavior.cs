@@ -144,7 +144,7 @@ public class TaskPerformerBehavior
         }
 
         //Assert
-        Assert.Contains(TestFormatter.Catched, s => s.Key == Constants.TaskNameLogLabel);
+        Assert.Contains(TestFormatter.Catched, s => s.Key == LogLabels.TaskName);
         Assert.Contains(TestFormatter.Catched, s => s.Key == MyLab.Log.PredefinedLabels.TraceId);
     }
 

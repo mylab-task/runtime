@@ -27,6 +27,7 @@ public class ConfigurationBuilderExtensionsBehavior
             .AddConfiguration(testSection)
             .Build();
         
+        //Assert
         Assert.Equal("baz", configRes["test:foo:bar"]);
     }
 }

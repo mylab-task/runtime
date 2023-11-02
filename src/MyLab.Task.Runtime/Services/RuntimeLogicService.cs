@@ -12,6 +12,7 @@ class RuntimeLogicService : BackgroundService
     private IDslLogger? _log;
     private RuntimeOptions _options;
     private IConfiguration _config;
+    private ITaskServicesPostProcessing _taskServicesPostProcessing;
     private ITaskAssetProvider _taskAssetProvider;
 
     private TaskConfigBuilder _taskConfigBuilder;
@@ -19,6 +20,7 @@ class RuntimeLogicService : BackgroundService
     public RuntimeLogicService
     (
         ITaskAssetProvider taskAssetProvider, 
+        ITaskServicesPostProcessing taskServicesPostProcessing,
         IOptions<RuntimeOptions> options,
         IConfiguration config,
         ILogger<RuntimeLogicService>? logger = null
@@ -27,6 +29,7 @@ class RuntimeLogicService : BackgroundService
         _log = logger?.Dsl();
         _options = options.Value;
         _config = config;
+        _taskServicesPostProcessing = taskServicesPostProcessing;
         _taskAssetProvider = taskAssetProvider ?? throw new ArgumentNullException(nameof(taskAssetProvider));
         _taskConfigBuilder = new TaskConfigBuilder(_config, _options);
     }
@@ -44,11 +47,31 @@ class RuntimeLogicService : BackgroundService
             return;
         }
 
-        var scheduler = new Scheduler(TimeSpan.FromSeconds(1));
+        Scheduler scheduler;
+        
+        try
+        {
+            scheduler = new Scheduler(TimeSpan.FromSeconds(1))
+            {
+                Logger = _log
+            };
+            RegisterTasks(taskPerformers, scheduler);
+        }
+        catch(Exception e)
+        {
+            _log?.Error("Unable to register tasks in the scheduler", e).Write();
+            return;
+        }
 
-        RegisterTasks(taskPerformers, scheduler);
-
-        await scheduler.RunAsync(stoppingToken);
+        try
+        {
+            await scheduler.RunAsync(stoppingToken);
+        }
+        catch(Exception e)
+        {
+            _log?.Error("Unable to run scheduler", e).Write();
+            return;
+        }
     }
 
     private void RegisterTasks(IEnumerable<ITaskPerformer> taskPerformers, Scheduler scheduler)
@@ -116,9 +139,9 @@ class RuntimeLogicService : BackgroundService
 
             var performerBuilder = new TaskPerformerBuilder(f.Name, startup)
             {
-                ActivitySource = new ActivitySource(Constants.TraceActivitySourceName),
+                ActivitySource = new ActivitySource(TraceActivitySourceNames.Default),
                 BaseConfig = _taskConfigBuilder.Build(f.Name.ToString()),
-                PostServiceProc = s => s.SetToTaskRuntimeLogging()
+                PostServiceProc = s => _taskServicesPostProcessing.PostProcess(s)
             };
 
             var performer = performerBuilder.Build();

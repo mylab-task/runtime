@@ -4,7 +4,7 @@ using MyLab.Task.RuntimeSdk;
 
 namespace TestTask;
 
-public class WriteToLogTaskStartup : ITaskStartup
+public class RequestSenderTaskStartup : ITaskStartup
 {
     public void AddConfiguration(IConfigurationBuilder configBuilder)
     {
@@ -13,6 +13,8 @@ public class WriteToLogTaskStartup : ITaskStartup
 
     public void AddServices(IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton<ITaskLogic, WriteToLogTaskLogic>();
+        services
+            .AddSingleton<ITaskLogic, RequestSenderTaskLogic>()
+            .Configure<RequestSenderOptions>(configuration.GetSection(RequestSenderOptions.SectionName));
     }
 }

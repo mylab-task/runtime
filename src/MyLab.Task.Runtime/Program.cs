@@ -2,7 +2,9 @@ using MyLab.Task.Runtime;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddTaskRuntime(builder.Configuration);
+builder.Services
+    .AddTaskRuntime()
+    .ConfigureTaskRuntime(builder.Configuration);
 
 builder.Services.AddControllers();
 

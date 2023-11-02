@@ -10,4 +10,6 @@ public class RuntimeOptions
 
     public IConfigurationSection? BaseTaskConfig { get; set; }
 
+    public string ProtocolId { get; set; } = "tasks";
+
 }

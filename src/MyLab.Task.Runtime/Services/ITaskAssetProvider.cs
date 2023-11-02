@@ -1,6 +1,6 @@
 ﻿namespace MyLab.Task.Runtime;
 
-interface ITaskAssetProvider
+public interface ITaskAssetProvider
 {
     IEnumerable<TaskAssetSource> Provide();
 }

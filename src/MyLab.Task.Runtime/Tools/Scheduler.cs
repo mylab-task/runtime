@@ -1,6 +1,7 @@
 ﻿namespace MyLab.Task.Runtime;
 
 using MyLab.Log.Dsl;
+using MyLab.Log.Scopes;
 using Task = System.Threading.Tasks.Task;
 
 class Scheduler
@@ -22,38 +23,103 @@ class Scheduler
 
     public async Task RunAsync(CancellationToken cancellationToken)
     {
+        Logger?
+            .Action("The scheduler starts")
+            .Write();
+
         if(_basePeriod == default)
+        {
+            Logger?
+                .Warning("The base scheduler period is default. Run will be skipped!")
+                .AndFactIs("base-period", _basePeriod)
+                .Write();
+
             return;
+        }
 
         while(!cancellationToken.IsCancellationRequested)
         {
             await Task.Delay(_basePeriod);
 
+            Logger?
+                .Debug("Scheduler tick")
+                .Write();
+
             foreach (var t in _tasks)
             {
-                ProcessRegisteredTask(t,cancellationToken);
+                using(Logger?.BeginScope(new LabelLogScope(LogLabels.TaskName, t.Performer.TaskName.ToString())))
+                {
+                    ProcessRegisteredTask(t,cancellationToken);
+                }
             }
         }
+
+        Logger?
+            .Action("The scheduler stops")
+            .Write();
     }
 
     private void ProcessRegisteredTask(RegisteredTask t, CancellationToken cancellationToken)
     {
-        if(IsActive(t)) return;
-
+               
         try
         {
-            if(DateTime.Now - t.StartedAt > t.Period)
+            var passedTime = DateTime.Now - t.StartedAt;
+
+            if(passedTime > t.Period)
             {
-                t.Task = t.Performer.PerformIterationAsync(cancellationToken);
-                t.Task.Start();
+                Logger?
+                    .Action("It's time to perform the task")
+                    .AndFactIs("passed", passedTime)
+                    .Write();
+
+                if(IsActive(t))
+                {
+                    Logger?
+                        .Action("A task performing will be skipped due to task already performing")
+                        .Write();
+                    return;
+                }
+
+                Logger?
+                    .Action("Task performing started")
+                    .Write();
+
+                t.Task = CallPerformerAsync(t.Performer, cancellationToken);
+
+                if(t.Task.Status == TaskStatus.Created)
+                {
+                    t.Task.Start();
+                }
+
                 t.StartedAt = DateTime.Now;
+
+                Logger?
+                    .Action("A task performing has been completed")
+                    .Write();
             }
         }
         catch(Exception unhandledTaskEx)
         {
             Logger?
-                .Error("Task performing error", unhandledTaskEx)
-                .AndLabel(Constants.TaskNameLogLabel, t.Performer.TaskName.ToString())
+                .Error("Task performing starting error", unhandledTaskEx)
+                .Write();
+        }
+    }
+
+    async Task CallPerformerAsync(ITaskPerformer performer, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await performer.PerformIterationAsync(cancellationToken);
+            Logger?
+                .Action("The task was completed")
+                .Write();
+        }
+        catch(Exception e)
+        {
+            Logger?
+                .Error("The performing error", e)
                 .Write();
         }
     }

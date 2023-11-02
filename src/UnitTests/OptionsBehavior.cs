@@ -62,6 +62,28 @@ public class OptionsBehavior
         Assert.Equal("bar", opts.Section["foo"]);
     }
 
+    [Fact(DisplayName = "Should not deserialize subconfig")]
+    public void ShouldDeserializeSubconfig()
+    {
+        //Arrange
+        var config = new ConfigurationBuilder()
+            .AddInMemoryCollection
+            (
+                new Dictionary<string, string>
+                {
+                    { nameof(TestOptions.Subconfig) + ":foo", "bar" } 
+                }
+            )
+            .Build();
+        
+        var services = new ServiceCollection()
+            .Configure<TestOptions>(config)
+            .BuildServiceProvider();
+
+        //Act & Assert
+        Assert.Throws<InvalidOperationException>(()=>services.GetService<IOptions<TestOptions>>()?.Value);
+    }
+
     [Fact(DisplayName = "Should merge config")]
     public void ShouldMergeConfig()
     {
@@ -109,6 +131,8 @@ public class OptionsBehavior
         public TimeSpan TimsSpan{get;set;}
 
         public IConfigurationSection? Section { get; set; }
+
+        public IConfiguration? Subconfig { get; set; }
     }
 
     class TestOptionsRoot

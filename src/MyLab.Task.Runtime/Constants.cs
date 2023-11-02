@@ -1,8 +1,16 @@
 ﻿namespace MyLab.Task.Runtime;
 
-static class Constants
+static class LogLabels
 {
-    public static readonly string TaskNameLogLabel = "task";
+    public const string TaskName = "task";
+}
 
-    public static readonly string TraceActivitySourceName = "MyLab.Task.Runtime";
+static class TraceActivitySourceNames
+{
+    public const string Default = "MyLab.Task.Runtime";
+}
+
+static class ProtocolTypes
+{
+    public const string Iterations = "task-iteration";
 }

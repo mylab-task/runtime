@@ -17,6 +17,8 @@ class TaskPerformer : ITaskPerformer
 
     public TaskQualifiedName TaskName { get; }
 
+    public IProtocolWriter? ProtocolWriter{ get; set; }
+
     public TaskPerformer(TaskQualifiedName name, IServiceProvider appServices)
     {
         _appServices = appServices ?? throw new ArgumentNullException(nameof(appServices));
@@ -43,7 +45,7 @@ class TaskPerformer : ITaskPerformer
 
             var labels = new Dictionary<string, string>
             {
-                { Constants.TaskNameLogLabel, TaskName.ToString() }
+                { LogLabels.TaskName, TaskName.ToString() }
             };
 
             if(traceId != null)
@@ -59,14 +61,24 @@ class TaskPerformer : ITaskPerformer
         try
         {
             await task.PerformAsync(ctx, cancellationToken);
+
+            if(ProtocolWriter != null)
+            {
+                await ProtocolWriter.WriteAsync(ctx, ctx.StartAt - DateTime.Now);
+            }
         }
         catch(Exception e)
         {
-            e.AndLabel(Constants.TaskNameLogLabel, TaskName.ToString());
+            e.AndLabel(LogLabels.TaskName, TaskName.ToString());
 
             if(traceId != null)
             {
                 e.AndLabel(PredefinedLabels.TraceId, traceId);
+            }
+
+            if(ProtocolWriter != null)
+            {
+                await ProtocolWriter.WriteAsync(ctx, ctx.StartAt - DateTime.Now, e);
             }
 
             throw;
