@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTask.UnitTests", "TestT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuncTests", "FuncTests\FuncTests.csproj", "{C44D4B3A-92DB-4198-9A83-6154471DD6C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestOldSdk", "TestOldSdk\TestOldSdk.csproj", "{215911F7-4B0C-41BA-8C30-DFCD269D1B5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestOldTask", "TestOldTask\TestOldTask.csproj", "{C77BA1DE-F19F-4E8E-AA9D-8CF01E4EE753}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{C44D4B3A-92DB-4198-9A83-6154471DD6C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C44D4B3A-92DB-4198-9A83-6154471DD6C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C44D4B3A-92DB-4198-9A83-6154471DD6C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{215911F7-4B0C-41BA-8C30-DFCD269D1B5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{215911F7-4B0C-41BA-8C30-DFCD269D1B5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{215911F7-4B0C-41BA-8C30-DFCD269D1B5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{215911F7-4B0C-41BA-8C30-DFCD269D1B5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C77BA1DE-F19F-4E8E-AA9D-8CF01E4EE753}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C77BA1DE-F19F-4E8E-AA9D-8CF01E4EE753}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C77BA1DE-F19F-4E8E-AA9D-8CF01E4EE753}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C77BA1DE-F19F-4E8E-AA9D-8CF01E4EE753}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

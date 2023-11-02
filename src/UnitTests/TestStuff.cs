@@ -13,4 +13,16 @@ static class TestStuff
                 )
             );
     }
+
+    public static string GetOldRefTestAssemblyPath()
+    {
+        return Path.GetFullPath
+            (
+                Path.Combine
+                (
+                    Directory.GetCurrentDirectory(), 
+                    "../../../../TestOldTask/bin/Debug/net6.0/TestOldTask.dll"
+                )
+            );
+    }
 }

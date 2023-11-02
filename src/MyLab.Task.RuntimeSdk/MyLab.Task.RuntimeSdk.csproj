@@ -2,13 +2,29 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Version>1.0.1</Version>
+    <Authors>Andrey O.</Authors>
+    <Copyright>Copyright (c) 2023 Andrey Osintsev &lt;ozzy.ext@gmail.com&gt;</Copyright>
+    <PackageProjectUrl>https://github.com/mylab-task/runtime</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/mylab-task/runtime/apiclient.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyVersion>1.0.1.0000</AssemblyVersion>
+    <FileVersion>1.0.1.0000</FileVersion>
+    <Description>An SDK to develop the tasks for MyLab.Task.Runtime</Description>
+    <PackageTags>task;.net</PackageTags>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <None Include="icon.png" Pack="true" PackagePath=""/>
   </ItemGroup>
 
 </Project>
