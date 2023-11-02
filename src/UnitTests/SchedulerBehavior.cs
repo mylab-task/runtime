@@ -22,6 +22,7 @@ public class SchedulerBehavior
 
         await Task.Delay(2000);
         cSource.Cancel();
+        t.Wait();
 
         //Assert
         taskPerformerMock.Verify(p => p.PerformIterationAsync(It.IsAny<CancellationToken>()), Times.Exactly(2));

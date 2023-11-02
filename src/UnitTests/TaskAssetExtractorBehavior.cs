@@ -20,7 +20,7 @@ public partial class TaskAssetExtractorBehavior
         Assert.NotNull(found);
         Assert.Equal("foo", found.Name.Asset);
         Assert.Null(found.Name.LocalName);
-        Assert.Equal("WriteToLogTaskStartup", found.StartupType.Name);
+        Assert.Equal("RequestSenderTaskStartup", found.StartupType.Name);
     }
 
     [Fact(DisplayName = "Fail if no tasks")]
