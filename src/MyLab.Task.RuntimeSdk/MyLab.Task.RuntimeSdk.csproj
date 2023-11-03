@@ -16,6 +16,8 @@
     <Description>An SDK to develop the tasks for MyLab.Task.Runtime</Description>
     <PackageTags>task;.net</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +27,8 @@
 
   <ItemGroup>
       <None Include="icon.png" Pack="true" PackagePath=""/>
+      <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+      <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
