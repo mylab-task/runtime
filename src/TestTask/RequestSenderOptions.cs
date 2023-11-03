@@ -1,8 +1,9 @@
-﻿namespace TestTask;
-
-public class RequestSenderOptions
+﻿namespace TestTask
 {
-    public const string SectionName = "RequestSender"; 
+    public class RequestSenderOptions
+    {
+        public const string SectionName = "RequestSender"; 
 
-    public string? Message { get; set; }
+        public string? Message { get; set; }
+    }
 }

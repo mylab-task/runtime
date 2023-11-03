@@ -1,18 +1,21 @@
-﻿namespace MyLab.Task.RuntimeSdk;
+﻿using System;
 
-/// <summary>
-/// Defines type meta-properties
-/// </summary>
-[AttributeUsage(AttributeTargets.Class)]
-public class TaskNameAttribute : Attribute
+namespace MyLab.Task.RuntimeSdk
 {
     /// <summary>
-    /// Task identical name
+    /// Defines type meta-properties
     /// </summary>
-    public string Name { get; }
-
-    public TaskNameAttribute(string name)
+    [AttributeUsage(AttributeTargets.Class)]
+    public class TaskNameAttribute : Attribute
     {
-        Name = name;
+        /// <summary>
+        /// Task identical name
+        /// </summary>
+        public string Name { get; }
+
+        public TaskNameAttribute(string name)
+        {
+            Name = name;
+        }
     }
 }

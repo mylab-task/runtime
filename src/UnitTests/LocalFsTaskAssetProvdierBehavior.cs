@@ -1,43 +1,47 @@
+using System.IO;
+using System.Linq;
 using MyLab.Task.Runtime;
+using Xunit;
 
-namespace UnitTests;
-
-public class LocalFsTaskAssetProviderBehavior
+namespace UnitTests
 {
-    [Fact(DisplayName = "Fail if asset dir not found")]
-    public void ShouldFailIfAssetDirNotFound()
+    public class LocalFsTaskAssetProviderBehavior
     {
-        //Arrange
-        ITaskAssetProvider provider = new LocalFsTaskAssetProvider("absent");
+        [Fact(DisplayName = "Fail if asset dir not found")]
+        public void ShouldFailIfAssetDirNotFound()
+        {
+            //Arrange
+            ITaskAssetProvider provider = new LocalFsTaskAssetProvider("absent");
         
-        //Act & Assert
-        Assert.Throws<DirectoryNotFoundException>(provider.Provide);
-    }
-
-    [Fact(DisplayName = "Find asset by nested dir")]
-    public void ShouldFindAssetByNestedDir()
-    {
-        //Arrange
-        ITaskAssetProvider provider = new LocalFsTaskAssetProvider("assets");
-        var assetDir = new DirectoryInfo("assets/foo");
-
-        TaskAssetSource[] foundAssets;
-
-        if(!assetDir.Exists)
-            assetDir.Create();
-
-        //Act
-        try
-        {
-            foundAssets = provider.Provide().ToArray();
-        }
-        finally
-        {
-            assetDir.Delete(true);
+            //Act & Assert
+            Assert.Throws<DirectoryNotFoundException>(provider.Provide);
         }
 
-        //Assert
-        Assert.Single(foundAssets);
-        Assert.Equal("foo", foundAssets[0].Name);
+        [Fact(DisplayName = "Find asset by nested dir")]
+        public void ShouldFindAssetByNestedDir()
+        {
+            //Arrange
+            ITaskAssetProvider provider = new LocalFsTaskAssetProvider("assets");
+            var assetDir = new DirectoryInfo("assets/foo");
+
+            TaskAssetSource[] foundAssets;
+
+            if(!assetDir.Exists)
+                assetDir.Create();
+
+            //Act
+            try
+            {
+                foundAssets = provider.Provide().ToArray();
+            }
+            finally
+            {
+                assetDir.Delete(true);
+            }
+
+            //Assert
+            Assert.Single(foundAssets);
+            Assert.Equal("foo", foundAssets[0].Name);
+        }
     }
 }

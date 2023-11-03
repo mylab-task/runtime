@@ -1,14 +1,18 @@
-namespace UnitTests;
+using System;
+using Xunit;
 
-public class TimeSpanBehavior
+namespace UnitTests
 {
-    [Fact]
-    public void ShouldCreateZeroDefault()
+    public class TimeSpanBehavior
     {
-        //Arrange
-        TimeSpan ts = TimeSpan.FromSeconds(0);
+        [Fact]
+        public void ShouldCreateZeroDefault()
+        {
+            //Arrange
+            TimeSpan ts = TimeSpan.FromSeconds(0);
         
-        //Act && Assert
-        Assert.Equal(default, ts);
+            //Act && Assert
+            Assert.Equal(default, ts);
+        }
     }
 }

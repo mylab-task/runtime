@@ -1,9 +1,10 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
 
-namespace MyLab.Task.Runtime;
-
-public interface IAssemblyLoader
+namespace MyLab.Task.Runtime
 {
-    Assembly Load(AssemblyLoadContext ctx);
+    public interface IAssemblyLoader
+    {
+        Assembly Load(AssemblyLoadContext ctx);
+    }
 }

@@ -1,23 +1,26 @@
-﻿namespace MyLab.Task.Runtime;
+﻿using System;
 
-public class TaskAssetSource
+namespace MyLab.Task.Runtime
 {
-    public string Name { get; }
-
-    public IAssemblyLoader Loader { get; }
-
-    public TaskAssetSource(string name, IAssemblyLoader loader)
+    public class TaskAssetSource
     {
-        if (string.IsNullOrEmpty(name))
-        {
-            throw new ArgumentException($"'{nameof(name)}' cannot be null or empty.", nameof(name));
-        }
+        public string Name { get; }
 
-        if (loader is null)
-        {
-            throw new ArgumentNullException(nameof(loader));
-        }
+        public IAssemblyLoader Loader { get; }
 
-        (Name, Loader) = (name, loader);
-    } 
+        public TaskAssetSource(string name, IAssemblyLoader loader)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentException($"'{nameof(name)}' cannot be null or empty.", nameof(name));
+            }
+
+            if (loader is null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+
+            (Name, Loader) = (name, loader);
+        } 
+    }
 }

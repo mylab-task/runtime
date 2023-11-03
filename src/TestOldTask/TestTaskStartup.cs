@@ -2,17 +2,18 @@
 using Microsoft.Extensions.DependencyInjection;
 using MyLab.Task.RuntimeSdk;
 
-namespace TestOldTask;
-
-public class TestTaskStartup : ITaskStartup
+namespace TestOldTask
 {
-    public void AddConfiguration(IConfigurationBuilder configBuilder)
+    public class TestTaskStartup : ITaskStartup
     {
+        public void AddConfiguration(IConfigurationBuilder configBuilder)
+        {
         
-    }
+        }
 
-    public void AddServices(IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddSingleton<ITaskLogic, TestTaskLogic>();
+        public void AddServices(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton<ITaskLogic, TestTaskLogic>();
+        }
     }
 }

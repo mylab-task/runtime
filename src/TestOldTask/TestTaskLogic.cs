@@ -1,11 +1,14 @@
-﻿using MyLab.Task.RuntimeSdk;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using MyLab.Task.RuntimeSdk;
 
-namespace TestOldTask;
-
-class TestTaskLogic : ITaskLogic
+namespace TestOldTask
 {
-    public ValueTask PerformAsync(TaskIterationContext iterationContext, CancellationToken cancellationToken)
+    class TestTaskLogic : ITaskLogic
     {
-        return ValueTask.CompletedTask;
+        public ValueTask PerformAsync(TaskIterationContext iterationContext, CancellationToken cancellationToken)
+        {
+            return ValueTask.CompletedTask;
+        }
     }
 }

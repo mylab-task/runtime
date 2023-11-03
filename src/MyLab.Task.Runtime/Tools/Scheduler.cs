@@ -1,149 +1,154 @@
-﻿namespace MyLab.Task.Runtime;
-
-using MyLab.Log.Dsl;
-using MyLab.Log.Scopes;
-using Task = System.Threading.Tasks.Task;
-
-class Scheduler
+﻿namespace MyLab.Task.Runtime
 {
-    private TimeSpan _basePeriod;
-    private List<RegisteredTask> _tasks = new List<RegisteredTask>();
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using MyLab.Log.Dsl;
+    using MyLab.Log.Scopes;
+    using Task = System.Threading.Tasks.Task;
 
-    public IDslLogger? Logger{get;set;}
-
-    public Scheduler(TimeSpan basePeriod)
+    class Scheduler
     {
-        _basePeriod = basePeriod;
-    }
+        private TimeSpan _basePeriod;
+        private List<RegisteredTask> _tasks = new List<RegisteredTask>();
 
-    public void RegisterTask(ITaskPerformer taskPerformer, TimeSpan period)
-    {
-        _tasks.Add(new RegisteredTask(taskPerformer, period));
-    }
+        public IDslLogger? Logger{get;set;}
 
-    public async Task RunAsync(CancellationToken cancellationToken)
-    {
-        Logger?
-            .Action("The scheduler starts")
-            .Write();
-
-        if(_basePeriod == default)
+        public Scheduler(TimeSpan basePeriod)
         {
-            Logger?
-                .Warning("The base scheduler period is default. Run will be skipped!")
-                .AndFactIs("base-period", _basePeriod)
-                .Write();
-
-            return;
+            _basePeriod = basePeriod;
         }
 
-        while(!cancellationToken.IsCancellationRequested)
+        public void RegisterTask(ITaskPerformer taskPerformer, TimeSpan period)
         {
-            await Task.Delay(_basePeriod);
-
-            Logger?
-                .Debug("Scheduler tick")
-                .Write();
-
-            foreach (var t in _tasks)
-            {
-                using(Logger?.BeginScope(new LabelLogScope(LogLabels.TaskName, t.Performer.TaskName.ToString())))
-                {
-                    ProcessRegisteredTask(t,cancellationToken);
-                }
-            }
+            _tasks.Add(new RegisteredTask(taskPerformer, period));
         }
 
-        Logger?
-            .Action("The scheduler stops")
-            .Write();
-    }
-
-    private void ProcessRegisteredTask(RegisteredTask t, CancellationToken cancellationToken)
-    {
-               
-        try
+        public async Task RunAsync(CancellationToken cancellationToken)
         {
-            var passedTime = DateTime.Now - t.StartedAt;
+            Logger?
+                .Action("The scheduler starts")
+                .Write();
 
-            if(passedTime > t.Period)
+            if(_basePeriod == default)
             {
                 Logger?
-                    .Action("It's time to perform the task")
-                    .AndFactIs("passed", passedTime)
+                    .Warning("The base scheduler period is default. Run will be skipped!")
+                    .AndFactIs("base-period", _basePeriod)
                     .Write();
 
-                if(IsActive(t))
+                return;
+            }
+
+            while(!cancellationToken.IsCancellationRequested)
+            {
+                await Task.Delay(_basePeriod);
+
+                Logger?
+                    .Debug("Scheduler tick")
+                    .Write();
+
+                foreach (var t in _tasks)
+                {
+                    using(Logger?.BeginScope(new LabelLogScope(LogLabels.TaskName, t.Performer.TaskName.ToString())))
+                    {
+                        ProcessRegisteredTask(t,cancellationToken);
+                    }
+                }
+            }
+
+            Logger?
+                .Action("The scheduler stops")
+                .Write();
+        }
+
+        private void ProcessRegisteredTask(RegisteredTask t, CancellationToken cancellationToken)
+        {
+               
+            try
+            {
+                var passedTime = DateTime.Now - t.StartedAt;
+
+                if(passedTime > t.Period)
                 {
                     Logger?
-                        .Action("A task performing will be skipped due to task already performing")
+                        .Action("It's time to perform the task")
+                        .AndFactIs("passed", passedTime)
                         .Write();
-                    return;
+
+                    if(IsActive(t))
+                    {
+                        Logger?
+                            .Action("A task performing will be skipped due to task already performing")
+                            .Write();
+                        return;
+                    }
+
+                    Logger?
+                        .Action("Task performing started")
+                        .Write();
+
+                    t.Task = CallPerformerAsync(t.Performer, cancellationToken);
+
+                    if(t.Task.Status == TaskStatus.Created)
+                    {
+                        t.Task.Start();
+                    }
+
+                    t.StartedAt = DateTime.Now;
+
+                    Logger?
+                        .Action("A task performing has been completed")
+                        .Write();
                 }
-
+            }
+            catch(Exception unhandledTaskEx)
+            {
                 Logger?
-                    .Action("Task performing started")
-                    .Write();
-
-                t.Task = CallPerformerAsync(t.Performer, cancellationToken);
-
-                if(t.Task.Status == TaskStatus.Created)
-                {
-                    t.Task.Start();
-                }
-
-                t.StartedAt = DateTime.Now;
-
-                Logger?
-                    .Action("A task performing has been completed")
+                    .Error("Task performing starting error", unhandledTaskEx)
                     .Write();
             }
         }
-        catch(Exception unhandledTaskEx)
+
+        async Task CallPerformerAsync(ITaskPerformer performer, CancellationToken cancellationToken)
         {
-            Logger?
-                .Error("Task performing starting error", unhandledTaskEx)
-                .Write();
+            try
+            {
+                await performer.PerformIterationAsync(cancellationToken);
+                Logger?
+                    .Action("The task was completed")
+                    .Write();
+            }
+            catch(Exception e)
+            {
+                Logger?
+                    .Error("The performing error", e)
+                    .Write();
+            }
         }
-    }
 
-    async Task CallPerformerAsync(ITaskPerformer performer, CancellationToken cancellationToken)
-    {
-        try
+        private bool IsActive(RegisteredTask t)
+            =>  t.Task != null && 
+                t.Task.Status != TaskStatus.Canceled && 
+                t.Task.Status != TaskStatus.Faulted &&
+                t.Task.Status != TaskStatus.RanToCompletion;
+
+        class RegisteredTask
         {
-            await performer.PerformIterationAsync(cancellationToken);
-            Logger?
-                .Action("The task was completed")
-                .Write();
-        }
-        catch(Exception e)
-        {
-            Logger?
-                .Error("The performing error", e)
-                .Write();
-        }
-    }
+            public Task? Task{get;set;}
 
-    private bool IsActive(RegisteredTask t)
-        =>  t.Task != null && 
-            t.Task.Status != TaskStatus.Canceled && 
-            t.Task.Status != TaskStatus.Faulted &&
-            t.Task.Status != TaskStatus.RanToCompletion;
+            public DateTime StartedAt {get;set;}
 
-    class RegisteredTask
-    {
-        public Task? Task{get;set;}
+            public ITaskPerformer Performer{get;}
 
-        public DateTime StartedAt {get;set;}
+            public TimeSpan Period {get;}
 
-        public ITaskPerformer Performer{get;}
-
-        public TimeSpan Period {get;}
-
-        public RegisteredTask(ITaskPerformer taskPerformer, TimeSpan period)
-        {
-            Performer = taskPerformer;
-            Period = period;
+            public RegisteredTask(ITaskPerformer taskPerformer, TimeSpan period)
+            {
+                Performer = taskPerformer;
+                Period = period;
+            }
         }
     }
 }

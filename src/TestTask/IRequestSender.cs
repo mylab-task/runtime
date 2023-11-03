@@ -1,6 +1,9 @@
-﻿namespace TestTask;
+﻿using System.Threading.Tasks;
 
-public interface IRequestSender
+namespace TestTask
 {
-    Task SendAsync(string message);
+    public interface IRequestSender
+    {
+        Task SendAsync(string message);
+    }
 }

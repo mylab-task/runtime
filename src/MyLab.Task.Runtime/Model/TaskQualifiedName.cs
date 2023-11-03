@@ -1,9 +1,10 @@
-﻿namespace MyLab.Task.Runtime;
-
-public record TaskQualifiedName(string Asset, string? LocalName)
+﻿namespace MyLab.Task.Runtime
 {
-    public override string ToString()
+    public record TaskQualifiedName(string Asset, string? LocalName)
     {
-        return LocalName != null ? $"{Asset}:{LocalName}" : Asset; 
+        public override string ToString()
+        {
+            return LocalName != null ? $"{Asset}:{LocalName}" : Asset; 
+        }
     }
 }

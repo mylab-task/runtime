@@ -1,36 +1,39 @@
+using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyLab.Task.Runtime;
 using MyLab.Task.RuntimeSdk;
+using Xunit;
 
-namespace UnitTests;
-
-public class TaskFactoryBehavior
+namespace UnitTests
 {
-    [Fact]
-    public void ShouldCreateStartup()
+    public class TaskFactoryBehavior
     {
-        //Arrange
-        var factory = new TaskStartupFactory(new TaskQualifiedName("foo", null), typeof(TestStartup));
-
-        //Act
-        var startup = factory.Create();
-
-        //Assert
-        Assert.NotNull(startup);
-        Assert.IsType<TestStartup>(startup);
-    }
-
-    class TestStartup : ITaskStartup
-    {
-        public void AddConfiguration(IConfigurationBuilder configBuilder)
+        [Fact]
+        public void ShouldCreateStartup()
         {
-            throw new NotImplementedException();
+            //Arrange
+            var factory = new TaskStartupFactory(new TaskQualifiedName("foo", null), typeof(TestStartup));
+
+            //Act
+            var startup = factory.Create();
+
+            //Assert
+            Assert.NotNull(startup);
+            Assert.IsType<TestStartup>(startup);
         }
 
-        public void AddServices(IServiceCollection services, IConfiguration configuration)
+        class TestStartup : ITaskStartup
         {
-            throw new NotImplementedException();
+            public void AddConfiguration(IConfigurationBuilder configBuilder)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void AddServices(IServiceCollection services, IConfiguration configuration)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

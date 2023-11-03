@@ -1,16 +1,19 @@
-﻿namespace FuncTests;
+﻿using System.IO;
 
-static class TestStuff
+namespace FuncTests
 {
-    public static  string GetTestAssemblyPath()
+    static class TestStuff
     {
-        return Path.GetFullPath
-            (
-                Path.Combine
+        public static  string GetTestAssemblyPath()
+        {
+            return Path.GetFullPath
                 (
-                    Directory.GetCurrentDirectory(), 
-                    "./TestTask.dll"
-                )
-            );
+                    Path.Combine
+                    (
+                        Directory.GetCurrentDirectory(), 
+                        "./TestTask.dll"
+                    )
+                );
+        }
     }
 }

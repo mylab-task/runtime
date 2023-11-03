@@ -1,13 +1,17 @@
-﻿namespace MyLab.Task.Runtime;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
-public class RuntimeOptions
+namespace MyLab.Task.Runtime
 {
-    public string AssetsPath { get; set; } = "/etc/task-runtime/assets";
+    public class RuntimeOptions
+    {
+        public string AssetsPath { get; set; } = "/etc/task-runtime/assets";
 
-    public Dictionary<string, TaskOptions>? Tasks { get; set; }
+        public Dictionary<string, TaskOptions>? Tasks { get; set; }
 
-    public IConfigurationSection? BaseTaskConfig { get; set; }
+        public IConfigurationSection? BaseTaskConfig { get; set; }
 
-    public string ProtocolId { get; set; } = "tasks";
+        public string ProtocolId { get; set; } = "tasks";
 
+    }
 }

@@ -1,16 +1,17 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
 
-namespace MyLab.Task.Runtime;
-
-class FileAssemblyLoader : IAssemblyLoader
+namespace MyLab.Task.Runtime
 {
-    private string _asssemblyFilePath;
-
-    public FileAssemblyLoader(string asssemblyFilePath) => _asssemblyFilePath = asssemblyFilePath;
-
-    public Assembly Load(AssemblyLoadContext ctx)
+    class FileAssemblyLoader : IAssemblyLoader
     {
-        return ctx.LoadFromAssemblyPath(_asssemblyFilePath); 
+        private string _asssemblyFilePath;
+
+        public FileAssemblyLoader(string asssemblyFilePath) => _asssemblyFilePath = asssemblyFilePath;
+
+        public Assembly Load(AssemblyLoadContext ctx)
+        {
+            return ctx.LoadFromAssemblyPath(_asssemblyFilePath); 
+        }
     }
 }

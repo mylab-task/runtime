@@ -1,30 +1,32 @@
-﻿using MyLab.Log;
+﻿using System;
+using MyLab.Log;
 using MyLab.Task.RuntimeSdk;
 
-namespace MyLab.Task.Runtime;
-
-public class TaskStartupFactory
+namespace MyLab.Task.Runtime
 {
-    public Type StartupType { get; }
-
-    public TaskQualifiedName Name { get; }
-
-    public TaskStartupFactory(TaskQualifiedName qualName, Type startupType)
+    public class TaskStartupFactory
     {
-        Name = qualName ?? throw new ArgumentNullException(nameof(qualName));
-        StartupType = startupType ?? throw new ArgumentNullException(nameof(startupType));
-    }
+        public Type StartupType { get; }
 
-    public ITaskStartup Create()
-    {
-        var obj = Activator.CreateInstance(StartupType);
-        
-        if(obj == null)
+        public TaskQualifiedName Name { get; }
+
+        public TaskStartupFactory(TaskQualifiedName qualName, Type startupType)
         {
-            throw new InvalidOperationException("Can't create startup")
-                .AndFactIs("type", StartupType.FullName);
+            Name = qualName ?? throw new ArgumentNullException(nameof(qualName));
+            StartupType = startupType ?? throw new ArgumentNullException(nameof(startupType));
         }
 
-        return (ITaskStartup)obj;
+        public ITaskStartup Create()
+        {
+            var obj = Activator.CreateInstance(StartupType);
+        
+            if(obj == null)
+            {
+                throw new InvalidOperationException("Can't create startup")
+                    .AndFactIs("type", StartupType.FullName);
+            }
+
+            return (ITaskStartup)obj;
+        }
     }
 }

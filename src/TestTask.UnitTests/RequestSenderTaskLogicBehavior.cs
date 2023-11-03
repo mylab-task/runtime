@@ -1,36 +1,39 @@
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
+using Xunit;
 
-namespace TestTask.UnitTests;
-
-public class RequestSenderTaskLogicBehavior
+namespace TestTask.UnitTests
 {
-    [Fact]
-    public async Task ShouldWriteLog()
+    public class RequestSenderTaskLogicBehavior
     {
-        //Arrange
-        string? lastLogMessage = null;
-
-        var requestSenderMock = new Mock<IRequestSender>();
-            requestSenderMock.Setup(l => l.SendAsync (It.IsAny<string>()))
-                .Returns<string>(m => 
-                {
-                    lastLogMessage = m;
-                    return Task.CompletedTask;
-                });
-
-        var options = new RequestSenderOptions
+        [Fact]
+        public async Task ShouldWriteLog()
         {
-            Message = "foo"
-        };
+            //Arrange
+            string? lastLogMessage = null;
 
-        var task = new RequestSenderTaskLogic(requestSenderMock.Object, new OptionsWrapper<RequestSenderOptions>(options));
+            var requestSenderMock = new Mock<IRequestSender>();
+                requestSenderMock.Setup(l => l.SendAsync (It.IsAny<string>()))
+                    .Returns<string>(m => 
+                    {
+                        lastLogMessage = m;
+                        return Task.CompletedTask;
+                    });
 
-        //Act
-        await task.PerformAsync(new MyLab.Task.RuntimeSdk.TaskIterationContext("", default), default);
+            var options = new RequestSenderOptions
+            {
+                Message = "foo"
+            };
 
-        //Assert
-        Assert.Equal("foo", lastLogMessage);
+            var task = new RequestSenderTaskLogic(requestSenderMock.Object, new OptionsWrapper<RequestSenderOptions>(options));
+
+            //Act
+            await task.PerformAsync(new MyLab.Task.RuntimeSdk.TaskIterationContext("", default), default);
+
+            //Assert
+            Assert.Equal("foo", lastLogMessage);
+        }
     }
 }

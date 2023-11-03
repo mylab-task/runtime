@@ -1,21 +1,24 @@
 ﻿using MyLab.Task.RuntimeSdk;
 using Microsoft.Extensions.Options;
+using System.Threading.Tasks;
+using System.Threading;
 
-namespace TestTask;
-
-public class RequestSenderTaskLogic : ITaskLogic
+namespace TestTask
 {
-    private IRequestSender _sender;
-    private RequestSenderOptions _options;
-
-    public  RequestSenderTaskLogic(IRequestSender sender, IOptions<RequestSenderOptions> options)
+    public class RequestSenderTaskLogic : ITaskLogic
     {
-        _sender = sender;
-        _options = options.Value;
-    }
+        private IRequestSender _sender;
+        private RequestSenderOptions _options;
 
-    public async ValueTask PerformAsync(TaskIterationContext iterationContext, CancellationToken cancellationToken)
-    {
-        await _sender.SendAsync(_options.Message ?? "[empty]");
+        public  RequestSenderTaskLogic(IRequestSender sender, IOptions<RequestSenderOptions> options)
+        {
+            _sender = sender;
+            _options = options.Value;
+        }
+
+        public async ValueTask PerformAsync(TaskIterationContext iterationContext, CancellationToken cancellationToken)
+        {
+            await _sender.SendAsync(_options.Message ?? "[empty]");
+        }
     }
 }

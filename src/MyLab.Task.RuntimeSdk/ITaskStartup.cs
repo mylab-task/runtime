@@ -1,20 +1,21 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MyLab.Task.RuntimeSdk;
-
-/// <summary>
-/// Initializes Task application
-/// </summary>
-public interface ITaskStartup
+namespace MyLab.Task.RuntimeSdk
 {
     /// <summary>
-    /// Add custom configuration here
+    /// Initializes Task application
     /// </summary>
-    void AddConfiguration(IConfigurationBuilder configBuilder);
+    public interface ITaskStartup
+    {
+        /// <summary>
+        /// Add custom configuration here
+        /// </summary>
+        void AddConfiguration(IConfigurationBuilder configBuilder);
 
-    /// <summary>
-    /// Add task logic and references here
-    /// </summary>
-    void AddServices(IServiceCollection services, IConfiguration configuration);
+        /// <summary>
+        /// Add task logic and references here
+        /// </summary>
+        void AddServices(IServiceCollection services, IConfiguration configuration);
+    }
 }

@@ -1,28 +1,31 @@
-﻿namespace UnitTests;
+﻿using System.IO;
 
-static class TestStuff
+namespace UnitTests
 {
-    public static  string GetTestAssemblyPath()
+    static class TestStuff
     {
-        return Path.GetFullPath
-            (
-                Path.Combine
+        public static  string GetTestAssemblyPath()
+        {
+            return Path.GetFullPath
                 (
-                    Directory.GetCurrentDirectory(), 
-                    "../../../../TestTask/bin/Debug/net6.0/TestTask.dll"
-                )
-            );
-    }
+                    Path.Combine
+                    (
+                        Directory.GetCurrentDirectory(), 
+                        "../../../../TestTask/bin/Debug/net5.0/TestTask.dll"
+                    )
+                );
+        }
 
-    public static string GetOldRefTestAssemblyPath()
-    {
-        return Path.GetFullPath
-            (
-                Path.Combine
+        public static string GetOldRefTestAssemblyPath()
+        {
+            return Path.GetFullPath
                 (
-                    Directory.GetCurrentDirectory(), 
-                    "../../../../TestOldTask/bin/Debug/net6.0/TestOldTask.dll"
-                )
-            );
+                    Path.Combine
+                    (
+                        Directory.GetCurrentDirectory(), 
+                        "../../../../TestOldTask/bin/Debug/net5.0/TestOldTask.dll"
+                    )
+                );
+        }
     }
 }

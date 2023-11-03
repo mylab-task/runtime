@@ -1,7 +1,10 @@
-﻿namespace MyLab.Task.Runtime;
+﻿using System.Collections.Generic;
 
-public interface ITaskAssetProvider
+namespace MyLab.Task.Runtime
 {
-    IEnumerable<TaskAssetSource> Provide();
-}
+    public interface ITaskAssetProvider
+    {
+        IEnumerable<TaskAssetSource> Provide();
+    }
 
+}

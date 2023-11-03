@@ -1,17 +1,19 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
-namespace MyLab.Task.Runtime;
-
-class TimeSpanToMsJsonConverter : JsonConverter<TimeSpan>
+namespace MyLab.Task.Runtime
 {
-    public override void WriteJson(JsonWriter writer, TimeSpan value, JsonSerializer serializer)
+    class TimeSpanToMsJsonConverter : JsonConverter<TimeSpan>
     {
-        writer.WriteValue(Math.Round(value.TotalMilliseconds).ToString("F0"));
-    }
+        public override void WriteJson(JsonWriter writer, TimeSpan value, JsonSerializer serializer)
+        {
+            writer.WriteValue(Math.Round(value.TotalMilliseconds).ToString("F0"));
+        }
 
-    public override TimeSpan ReadJson(JsonReader reader, Type objectType, TimeSpan existingValue, bool hasExistingValue,
-        JsonSerializer serializer)
-    {
-        throw new NotImplementedException();
+        public override TimeSpan ReadJson(JsonReader reader, Type objectType, TimeSpan existingValue, bool hasExistingValue,
+            JsonSerializer serializer)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

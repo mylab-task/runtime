@@ -1,38 +1,43 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Microsoft.Extensions.Options;
 using MyLab.Log;
 
-namespace MyLab.Task.Runtime;
-
-class LocalFsTaskAssetProvider : ITaskAssetProvider
+namespace MyLab.Task.Runtime
 {
-    private string _basePath;
-
-    public LocalFsTaskAssetProvider(string basePath)
+    class LocalFsTaskAssetProvider : ITaskAssetProvider
     {
-        _basePath = basePath ?? throw new ArgumentNullException(nameof(basePath));
-    }
+        private string _basePath;
 
-    public IEnumerable<TaskAssetSource> Provide()
-    {
-        var libDir = new DirectoryInfo(_basePath);
-
-        if(!libDir.Exists)
+        public LocalFsTaskAssetProvider(string basePath)
         {
-            throw new DirectoryNotFoundException("Assets directory not found")
-                .AndFactIs("path", _basePath);
+            _basePath = basePath ?? throw new ArgumentNullException(nameof(basePath));
         }
 
-        return libDir.GetDirectories().Select(CreateTaskAsset);
+        public IEnumerable<TaskAssetSource> Provide()
+        {
+            var libDir = new DirectoryInfo(_basePath);
+
+            if(!libDir.Exists)
+            {
+                throw new DirectoryNotFoundException("Assets directory not found")
+                    .AndFactIs("path", _basePath);
+            }
+
+            return libDir.GetDirectories().Select(CreateTaskAsset);
+        }
+
+        private TaskAssetSource CreateTaskAsset(DirectoryInfo assetDir)
+        {
+            var fullAssemblyPath = Path.Combine(assetDir.FullName, assetDir.Name + ".dll");
+            return new TaskAssetSource
+            (
+                assetDir.Name,  
+                new FileAssemblyLoader(fullAssemblyPath)
+            );
+        }
     }
 
-    private TaskAssetSource CreateTaskAsset(DirectoryInfo assetDir)
-    {
-        var fullAssemblyPath = Path.Combine(assetDir.FullName, assetDir.Name + ".dll");
-        return new TaskAssetSource
-        (
-            assetDir.Name,  
-            new FileAssemblyLoader(fullAssemblyPath)
-        );
-    }
 }
-

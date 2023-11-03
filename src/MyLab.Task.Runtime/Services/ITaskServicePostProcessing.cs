@@ -1,6 +1,9 @@
-﻿namespace MyLab.Task.Runtime;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-public interface ITaskServicesPostProcessing
+namespace MyLab.Task.Runtime
 {
-    IServiceCollection PostProcess(IServiceCollection services);
+    public interface ITaskServicesPostProcessing
+    {
+        IServiceCollection PostProcess(IServiceCollection services);
+    }
 }

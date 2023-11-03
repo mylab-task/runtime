@@ -1,8 +1,12 @@
-﻿namespace MyLab.Task.Runtime;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 
-public class TaskOptions
+namespace MyLab.Task.Runtime
 {
-    public TimeSpan? Period { get; set; }
+    public class TaskOptions
+    {
+        public TimeSpan? Period { get; set; }
 
-    public IConfigurationSection? Config { get; set; }
+        public IConfigurationSection? Config { get; set; }
+    }
 }

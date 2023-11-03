@@ -1,10 +1,13 @@
 ﻿
-namespace MyLab.Task.Runtime;
+using Microsoft.Extensions.DependencyInjection;
 
-class TaskServicesPostProcessing : ITaskServicesPostProcessing
+namespace MyLab.Task.Runtime
 {
-    public IServiceCollection PostProcess(IServiceCollection services)
+    class TaskServicesPostProcessing : ITaskServicesPostProcessing
     {
-        return services.SetToTaskRuntimeLogging();
+        public IServiceCollection PostProcess(IServiceCollection services)
+        {
+            return services.SetToTaskRuntimeLogging();
+        }
     }
 }

@@ -1,12 +1,16 @@
-﻿namespace MyLab.Task.RuntimeSdk;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
-/// <summary>
-/// Provides task logic
-/// </summary>
-public interface ITaskLogic
+namespace MyLab.Task.RuntimeSdk
 {
     /// <summary>
-    /// Performs a logic
+    /// Provides task logic
     /// </summary>
-    ValueTask PerformAsync(TaskIterationContext iterationContext, CancellationToken cancellationToken);
+    public interface ITaskLogic
+    {
+        /// <summary>
+        /// Performs a logic
+        /// </summary>
+        ValueTask PerformAsync(TaskIterationContext iterationContext, CancellationToken cancellationToken);
+    }
 }

@@ -1,52 +1,55 @@
+using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using MyLab.Task.Runtime;
 using MyLab.Task.RuntimeSdk;
+using Xunit;
 
-namespace UnitTests;
-
-public class TaskPerformerBuilderBehavior
+namespace UnitTests
 {
-    [Fact(DisplayName = "Shoud create and init TaskApp")]
-    public void ShouldCrateAndInitStartup()
+    public class TaskPerformerBuilderBehavior
     {
-        //Arrange
-        var baseConfig = new ConfigurationBuilder()
-            .AddInMemoryCollection
-            (
-                new [] { new KeyValuePair<string, string>("foo", "bar") }
-            ).Build();
-        var startupMock = new Mock<ITaskStartup>();
-
-        bool servicesHasBeenProcessed = false;
-
-        var builder = new TaskPerformerBuilder(new TaskQualifiedName("baz", null), startupMock.Object)
+        [Fact(DisplayName = "Shoud create and init TaskApp")]
+        public void ShouldCrateAndInitStartup()
         {
-            BaseConfig = baseConfig,
-            PostServiceProc = _ => servicesHasBeenProcessed = true
-        }; 
+            //Arrange
+            var baseConfig = new ConfigurationBuilder()
+                .AddInMemoryCollection
+                (
+                    new [] { new KeyValuePair<string, string>("foo", "bar") }
+                ).Build();
+            var startupMock = new Mock<ITaskStartup>();
+
+            bool servicesHasBeenProcessed = false;
+
+            var builder = new TaskPerformerBuilder(new TaskQualifiedName("baz", null), startupMock.Object)
+            {
+                BaseConfig = baseConfig,
+                PostServiceProc = _ => servicesHasBeenProcessed = true
+            }; 
         
-        //Act
-        ITaskPerformer taskApp = builder.Build();
+            //Act
+            ITaskPerformer taskApp = builder.Build();
         
-        //Assert
-        Assert.Equal("baz", taskApp.TaskName.Asset);
-        Assert.True(servicesHasBeenProcessed);
-        startupMock.Verify
-        (
-            s => s.AddConfiguration
+            //Assert
+            Assert.Equal("baz", taskApp.TaskName.Asset);
+            Assert.True(servicesHasBeenProcessed);
+            startupMock.Verify
             (
-                It.Is<IConfigurationBuilder>(c => c.Build()["foo"] == "bar")
-            )
-        );
-        startupMock.Verify
-        (
-            s => s.AddServices
+                s => s.AddConfiguration
+                (
+                    It.Is<IConfigurationBuilder>(c => c.Build()["foo"] == "bar")
+                )
+            );
+            startupMock.Verify
             (
-                It.Is<IServiceCollection>(s => s != null), 
-                It.Is<IConfiguration>(c => c["foo"] == "bar")
-            )
-        );
+                s => s.AddServices
+                (
+                    It.Is<IServiceCollection>(s => s != null), 
+                    It.Is<IConfiguration>(c => c["foo"] == "bar")
+                )
+            );
+        }
     }
 }
