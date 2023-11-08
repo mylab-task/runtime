@@ -10,7 +10,7 @@
 
     interface IProtocolWriter
     {
-        Task WriteAsync(TaskIterationContext taskIterationContext, TimeSpan iterationDuration, Exception? error = null);
+        Task WriteAsync(TaskQualifiedName qualifiedName, TaskIterationContext taskIterationContext, TimeSpan iterationDuration, Exception? error = null);
     }
 
     class ProtocolWriter : IProtocolWriter
@@ -35,10 +35,10 @@
             }
         
             _log = logger?.Dsl();
-            _protocolId = options.Value.ProtocolId ?? ProtocolTypes.Iterations;
+            _protocolId = options.Value.ProtocolId ?? Protocol.DefaultName;
         }
 
-        public Task WriteAsync(TaskIterationContext ctx, TimeSpan iterationDuration, Exception? error = null)
+        public Task WriteAsync(TaskQualifiedName qualifiedName, TaskIterationContext ctx, TimeSpan iterationDuration, Exception? error = null)
         {
             if(_safeProtocolApi == null) return Task.CompletedTask;
 
@@ -51,7 +51,7 @@
                     DateTime = ctx.StartAt,
                     Metrics = ctx.Report?.Metrics,
                     Subject = ctx.Report?.SubjectId,
-                    Type = ProtocolTypes.Iterations,
+                    Type = qualifiedName.ToString(),
                     TraceId = ctx.TraceId,
                     Workload = ctx.Report?.Workload ?? IterationWorkload.Undefined,
                     Duration = iterationDuration,

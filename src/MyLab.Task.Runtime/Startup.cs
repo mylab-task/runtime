@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MyLab.Log;
+using MyLab.ApiClient;
+using MyLab.ProtocolStorage.Client;
 
 namespace MyLab.Task.Runtime
 {
@@ -31,7 +33,9 @@ namespace MyLab.Task.Runtime
 
             services
                 .AddTaskRuntime()
-                .ConfigureTaskRuntime(Configuration);
+                .ConfigureTaskRuntime(Configuration)
+                .AddOptionalApiClients(r => r.RegisterContract<IProtocolApiV1>())
+                .ConfigureApiClients(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

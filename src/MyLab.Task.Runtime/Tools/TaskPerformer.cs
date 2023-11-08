@@ -69,7 +69,7 @@ namespace MyLab.Task.Runtime
 
                 if(ProtocolWriter != null)
                 {
-                    await ProtocolWriter.WriteAsync(ctx, ctx.StartAt - DateTime.Now);
+                    await ProtocolWriter.WriteAsync(TaskName, ctx, ctx.StartAt - DateTime.Now);
                 }
             }
             catch(Exception e)
@@ -83,7 +83,7 @@ namespace MyLab.Task.Runtime
 
                 if(ProtocolWriter != null)
                 {
-                    await ProtocolWriter.WriteAsync(ctx, ctx.StartAt - DateTime.Now, e);
+                    await ProtocolWriter.WriteAsync(TaskName, ctx, ctx.StartAt - DateTime.Now, e);
                 }
 
                 throw;

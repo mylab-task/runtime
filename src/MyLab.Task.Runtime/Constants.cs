@@ -10,8 +10,8 @@
         public const string Default = "MyLab.Task.Runtime";
     }
 
-    static class ProtocolTypes
+    static class Protocol
     {
-        public const string Iterations = "task-iteration";
+        public const string DefaultName = "tasks";
     }
 }

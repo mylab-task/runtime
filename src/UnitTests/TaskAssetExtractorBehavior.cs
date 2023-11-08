@@ -71,6 +71,40 @@ namespace UnitTests
             Assert.Throws<InvalidOperationException>(() => extractor.Extract().ToArray());
         }
 
+        [Fact(DisplayName = "Fail if several tasks without the same names")]
+        public void ShouldFailIfSeveralTasksWithSameLocalNames()
+        {
+            //Arrange
+            var getAssemblyTypesMock = GetStrategyMock
+            (
+                new []
+                {
+                    new TypeDesc
+                    (
+                        Type: typeof(TestTaskStartup), 
+                        IsPublic: true,
+                        IsImplTaskStartup: true,
+                        HasGenericParams: false,
+                        HasPubDefCtor: true,
+                        Name: "foo"
+                    ),
+                    new TypeDesc
+                    (
+                        Type: typeof(TestTaskStartup), 
+                        IsPublic: true,
+                        IsImplTaskStartup: true,
+                        HasGenericParams: false,
+                        HasPubDefCtor: true,
+                        Name: "foo"
+                    ),
+                }
+            );
+            var extractor = new TaskAssetExtractor(_testAsset, getAssemblyTypesMock);
+        
+            //Act & Assert
+            Assert.Throws<InvalidOperationException>(() => extractor.Extract().ToArray());
+        }
+
     
         [Theory(DisplayName = "Should create correct task name")]
         [InlineData("bar")]

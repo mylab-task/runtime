@@ -20,7 +20,7 @@ namespace MyLab.Task.RuntimeSdk
         /// <summary>
         /// Iteration report. 'null' by default.
         /// </summary>
-        public IterationReport? Report { get; set; }
+        public IterationReport? Report { get; set; } = null;
 
         /// <summary>
         /// Initializes a new instance of <see cref="TaskIterationContext"/>

@@ -68,7 +68,7 @@
                
             try
             {
-                var passedTime = DateTime.Now - t.StartedAt;
+                var passedTime = DateTime.Now - t.LastCheck;
 
                 if(passedTime > t.Period)
                 {
@@ -109,6 +109,10 @@
                     .Error("Task performing starting error", unhandledTaskEx)
                     .Write();
             }
+            finally
+            {
+                t.LastCheck = DateTime.Now;
+            }
         }
 
         async Task CallPerformerAsync(ITaskPerformer performer, CancellationToken cancellationToken)
@@ -139,6 +143,8 @@
             public Task? Task{get;set;}
 
             public DateTime StartedAt {get;set;}
+
+            public DateTime LastCheck{get;set;}
 
             public ITaskPerformer Performer{get;}
 
