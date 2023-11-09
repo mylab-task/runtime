@@ -44,6 +44,12 @@ namespace MyLab.Task.Runtime
                 throw new InvalidOperationException("More then one task with default name detected");
             } 
 
+            foreach (var taskNameGroup in found.GroupBy(t => t.Name).Where(g => g.Count() > 1))
+            {
+                throw new InvalidOperationException("More then one task with the same name detected")
+                        .AndFactIs("name", taskNameGroup.Key);
+            } 
+
             foreach(var t in found)
             {
                 if(t.HasGenericParams)
