@@ -47,7 +47,7 @@
                 _protocolId,
                 new TaskIterationProtocolEvent
                 {
-                    Id = ctx.Report?.IterationId,
+                    Id = ctx.Report?.IterationId ?? ctx.TraceId,
                     DateTime = ctx.StartAt,
                     Metrics = ctx.Report?.Metrics,
                     Subject = ctx.Report?.SubjectId,
