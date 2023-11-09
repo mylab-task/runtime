@@ -11,6 +11,11 @@ namespace MyLab.Task.Runtime
     {
         private string _basePath;
 
+        public LocalFsTaskAssetProvider(IOptions<RuntimeOptions> opts)
+            : this(opts.Value.AssetPath)
+        {
+        }
+
         public LocalFsTaskAssetProvider(string basePath)
         {
             _basePath = basePath ?? throw new ArgumentNullException(nameof(basePath));

@@ -26,7 +26,8 @@ namespace MyLab.Task.Runtime
                 .SetToTaskRuntimeLogging()
                 .AddHostedService<RuntimeLogicService>()
                 .AddSingleton<IProtocolWriter, ProtocolWriter>()
-                .AddSingleton<ITaskServicesPostProcessing, TaskServicesPostProcessing>();
+                .AddSingleton<ITaskServicesPostProcessing, TaskServicesPostProcessing>()
+                .AddSingleton<ITaskAssetProvider, LocalFsTaskAssetProvider>();
         }
 
         public static IServiceCollection ConfigureTaskRuntime(this IServiceCollection services, IConfiguration configuration)

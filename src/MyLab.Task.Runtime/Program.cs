@@ -10,16 +10,9 @@ namespace MyLab.Task.Runtime
         {
             CreateWebHostBuilder(args).Build().Run();
         }
-
-#if DEBUG
+        
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
-#else
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .AddRemoteConfiguration()
-                .UseStartup<Startup>();
-#endif
     }
 }

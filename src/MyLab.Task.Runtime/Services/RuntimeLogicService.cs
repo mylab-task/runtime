@@ -43,10 +43,24 @@ namespace MyLab.Task.Runtime
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            IEnumerable<ITaskPerformer> taskPerformers;
+            ITaskPerformer[] taskPerformers;
             try
             {
-                taskPerformers = LoadTaskAssets();
+                _log?.Action("Begin to load assets")
+                    .AndFactIs("path", _options.AssetPath)
+                    .Write();
+                taskPerformers = LoadTaskAssets().ToArray();
+
+                if(taskPerformers.Length != 0)
+                {
+                    _log?.Action("Assets loading completed")
+                        .AndFactIs("load-count", taskPerformers.Length)
+                        .Write();
+                }
+                else
+                {
+                    _log?.Warning("No assets found and loaded").Write();
+                }
             }
             catch (Exception e)
             {
