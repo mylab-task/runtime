@@ -25,6 +25,8 @@ RUN apt update -y && apt install -y wget
 
 COPY ./Scripts/ /usr/local/bin/
 
+RUN find /usr/local/bin -name "*.sh" -type f -exec chmod +x {} \;
+
 RUN mkdir -p /etc/task-runtime/assets
 
 ENTRYPOINT ["sh", "-c", "dotnet /app/${PROJ_FILE}.dll"]
