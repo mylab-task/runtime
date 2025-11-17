@@ -6,7 +6,7 @@ ARG PROJ
 WORKDIR /src
 
 # copy csproj and restore as distinct layers
-COPY . .
+COPY ./src .
 RUN dotnet restore
 
 # copy everything else and build app
@@ -21,9 +21,10 @@ WORKDIR /app
 COPY --from=build /app /app
 EXPOSE 80
 
-RUN apt update -y && apt install -y wget
+COPY ./ci/sources.list /etc/apt/sources.list
+COPY ./src/Scripts/ /usr/local/bin/
 
-COPY ./Scripts/ /usr/local/bin/
+RUN apt update -y && apt install -y wget
 
 RUN find /usr/local/bin -name "*.sh" -type f -exec chmod +x {} \;
 
