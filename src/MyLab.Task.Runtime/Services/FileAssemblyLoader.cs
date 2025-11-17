@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 using System.Xml.Linq;
 
@@ -23,7 +24,18 @@ namespace MyLab.Task.Runtime
         {
             var targetAssembly =  ctx.LoadFromAssemblyPath(_assemblyFilePath);
             ctx.Resolving += ExtAssemblyResolving;
+            ctx.ResolvingUnmanagedDll += Ctx_ResolvingUnmanagedDll;
             return targetAssembly;
+        }
+
+        private IntPtr Ctx_ResolvingUnmanagedDll(Assembly assemblyName, string libName)
+        {
+            var foundLibs = Directory.GetFileSystemEntries(new FileInfo(_assemblyDirectoryName).FullName, libName, SearchOption.AllDirectories);
+            if (foundLibs.Any())
+            {
+                return NativeLibrary.Load(foundLibs[0]);
+            }
+            return IntPtr.Zero;
         }
 
         private Assembly? ExtAssemblyResolving(AssemblyLoadContext ctx, AssemblyName assemblyName)
