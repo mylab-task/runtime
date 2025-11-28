@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -107,7 +106,7 @@ namespace UnitTests
         }
 
         [Fact(DisplayName = "Should add task log scopes")]
-        public async Task ShouldAddTaskLogSopes()
+        public async Task ShouldAddTaskLogScopes()
         {
             //Arrange
             var taskLogicMock = new Mock<ITaskLogic>();

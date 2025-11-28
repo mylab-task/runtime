@@ -11,7 +11,7 @@ namespace UnitTests
                     Path.Combine
                     (
                         Directory.GetCurrentDirectory(), 
-                        "../../../../TestTask/bin/Debug/net5.0/TestTask.dll"
+                        "../../../../TestTask/bin/Debug/net10.0/TestTask.dll"
                     )
                 );
         }
@@ -23,7 +23,7 @@ namespace UnitTests
                     Path.Combine
                     (
                         Directory.GetCurrentDirectory(), 
-                        "../../../../TestOldTask/bin/Debug/net5.0/TestOldTask.dll"
+                        "../../../../TestOldTask/bin/Debug/net10.0/TestOldTask.dll"
                     )
                 );
         }
