@@ -1,0 +1,1 @@
+docker build --platform linux/amd64 -f ./Dockerfile -t ghcr.io/mylab-task/runtime:local ..
